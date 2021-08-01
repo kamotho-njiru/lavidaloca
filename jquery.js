@@ -708,12 +708,12 @@
                                 }
                             }
 
-                            // Type selector
+
                         } else if (match[2]) {
                             push.apply(results, context.getElementsByTagName(selector));
                             return results;
 
-                            // Class selector
+
                         } else if ((m = match[3]) && support.getElementsByClassName &&
                             context.getElementsByClassName) {
 
@@ -722,33 +722,27 @@
                         }
                     }
 
-                    // Take advantage of querySelectorAll
+
                     if (support.qsa &&
                         !nonnativeSelectorCache[selector + " "] &&
                         (!rbuggyQSA || !rbuggyQSA.test(selector)) &&
 
-                        // Support: IE 8 only
-                        // Exclude object elements
                         (nodeType !== 1 || context.nodeName.toLowerCase() !== "object")) {
 
                         newSelector = selector;
                         newContext = context;
 
-                        // qSA considers elements outside a scoping root when evaluating child or
-                        // descendant combinators, which is not what we want.
-                        // In such cases, we work around the behavior by prefixing every selector in the
-                        // list with an ID selector referencing the scope context.
-                        // Thanks to Andrew Dupont for this technique.
+
                         if (nodeType === 1 && rdescend.test(selector)) {
 
-                            // Capture the context ID, setting it first if necessary
+
                             if ((nid = context.getAttribute("id"))) {
                                 nid = nid.replace(rcssescape, fcssescape);
                             } else {
                                 context.setAttribute("id", (nid = expando));
                             }
 
-                            // Prefix every selector in the list
+
                             groups = tokenize(selector);
                             i = groups.length;
                             while (i--) {
@@ -756,7 +750,7 @@
                             }
                             newSelector = groups.join(",");
 
-                            // Expand context for sibling selectors
+
                             newContext = rsibling.test(selector) && testContext(context.parentNode) ||
                                 context;
                         }
@@ -777,12 +771,11 @@
                 }
             }
 
-            // All others
+
             return select(selector.replace(rtrim, "$1"), context, results, seed);
         }
 
-        /**
-         * Create key-value caches of limited size
+        /*
          * @returns {function(string, object)} Returns the Object data after storing it on itself with
          *	property name the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)
          *	deleting the oldest entry
@@ -791,9 +784,9 @@
             var keys = [];
 
             function cache(key, value) {
-                // Use (key + " ") to avoid collision with native prototype properties (see Issue #157)
+
                 if (keys.push(key + " ") > Expr.cacheLength) {
-                    // Only keep the most recent entries
+
                     delete cache[keys.shift()];
                 }
                 return (cache[key + " "] = value);
@@ -822,11 +815,11 @@
             } catch (e) {
                 return false;
             } finally {
-                // Remove from its parent by default
+
                 if (el.parentNode) {
                     el.parentNode.removeChild(el);
                 }
-                // release memory in IE
+
                 el = null;
             }
         }
@@ -856,12 +849,12 @@
                 diff = cur && a.nodeType === 1 && b.nodeType === 1 &&
                 a.sourceIndex - b.sourceIndex;
 
-            // Use IE sourceIndex if available on both nodes
+
             if (diff) {
                 return diff;
             }
 
-            // Check if b follows a
+
             if (cur) {
                 while ((cur = cur.nextSibling)) {
                     if (cur === b) {
@@ -901,24 +894,19 @@
          */
         function createDisabledPseudo(disabled) {
 
-            // Known :disabled false positives: fieldset[disabled] > legend:nth-of-type(n+2) :can-disable
+
             return function(elem) {
 
-                // Only certain elements can match :enabled or :disabled
-                // https://html.spec.whatwg.org/multipage/scripting.html#selector-enabled
-                // https://html.spec.whatwg.org/multipage/scripting.html#selector-disabled
+
+
                 if ("form" in elem) {
 
-                    // Check for inherited disabledness on relevant non-disabled elements:
-                    // * listed form-associated elements in a disabled fieldset
-                    //   https://html.spec.whatwg.org/multipage/forms.html#category-listed
-                    //   https://html.spec.whatwg.org/multipage/forms.html#concept-fe-disabled
-                    // * option elements in a disabled optgroup
-                    //   https://html.spec.whatwg.org/multipage/forms.html#concept-option-disabled
-                    // All such elements have a "form" property.
+
+
+
                     if (elem.parentNode && elem.disabled === false) {
 
-                        // Option elements defer to a parent optgroup if present
+
                         if ("label" in elem) {
                             if ("label" in elem.parentNode) {
                                 return elem.parentNode.disabled === disabled;
@@ -927,26 +915,22 @@
                             }
                         }
 
-                        // Support: IE 6 - 11
-                        // Use the isDisabled shortcut property to check for disabled fieldset ancestors
+
                         return elem.isDisabled === disabled ||
 
-                            // Where there is no isDisabled, check manually
-                            /* jshint -W018 */
+
                             elem.isDisabled !== !disabled &&
                             inDisabledFieldset(elem) === disabled;
                     }
 
                     return elem.disabled === disabled;
 
-                    // Try to winnow out elements that can't be disabled before trusting the disabled property.
-                    // Some victims get caught in our net (label, legend, menu, track), but it shouldn't
-                    // even exist on them, let alone have a boolean value.
+
                 } else if ("label" in elem) {
                     return elem.disabled === disabled;
                 }
 
-                // Remaining elements are neither :enabled nor :disabled
+
                 return false;
             };
         }
@@ -963,7 +947,7 @@
                         matchIndexes = fn([], seed.length, argument),
                         i = matchIndexes.length;
 
-                    // Match elements found at the specified indexes
+
                     while (i--) {
                         if (seed[(j = matchIndexes[i])]) {
                             seed[j] = !(matches[j] = seed[j]);
@@ -973,100 +957,92 @@
             });
         }
 
-        /**
-         * Checks a node for validity as a Sizzle context
-         * @param {Element|Object=} context
-         * @returns {Element|Object|Boolean} The input node if acceptable, otherwise a falsy value
-         */
+
+
+        @param { Element | Object = }
+        context
+        @returns { Element | Object | Boolean }
+
         function testContext(context) {
             return context && typeof context.getElementsByTagName !== "undefined" && context;
         }
 
-        // Expose support vars for convenience
+
         support = Sizzle.support = {};
 
-        /**
-         * Detects XML nodes
-         * @param {Element|Object} elem An element or a document
-         * @returns {Boolean} True iff elem is a non-HTML XML node
-         */
+
+        Detects XML nodes
+        @param { Element | Object }
+        elem An element or a document
+        @returns { Boolean }
+        True iff elem is a non - HTML XML node
+
         isXML = Sizzle.isXML = function(elem) {
             var namespace = elem.namespaceURI,
                 docElem = (elem.ownerDocument || elem).documentElement;
 
-            // Support: IE <=8
-            // Assume HTML when documentElement doesn't yet exist, such as inside loading iframes
-            // https://bugs.jquery.com/ticket/4833
+
             return !rhtml.test(namespace || docElem && docElem.nodeName || "HTML");
         };
 
-        /**
-         * Sets document-related variables once based on the current document
-         * @param {Element|Object} [doc] An element or document object to use to set the document
-         * @returns {Object} Returns the current document
-         */
+
+
+        @param { Element | Object }[doc]
+        @returns { Object }
         setDocument = Sizzle.setDocument = function(node) {
             var hasCompare, subWindow,
                 doc = node ? node.ownerDocument || node : preferredDoc;
 
-            // Return early if doc is invalid or already selected
+
             if (doc === document || doc.nodeType !== 9 || !doc.documentElement) {
                 return document;
             }
 
-            // Update global variables
+
             document = doc;
             docElem = document.documentElement;
             documentIsHTML = !isXML(document);
 
-            // Support: IE 9-11, Edge
-            // Accessing iframe documents after unload throws "permission denied" errors (jQuery #13936)
+
             if (preferredDoc !== document &&
                 (subWindow = document.defaultView) && subWindow.top !== subWindow) {
 
-                // Support: IE 11, Edge
+
                 if (subWindow.addEventListener) {
                     subWindow.addEventListener("unload", unloadHandler, false);
 
-                    // Support: IE 9 - 10 only
+
                 } else if (subWindow.attachEvent) {
                     subWindow.attachEvent("onunload", unloadHandler);
                 }
             }
 
-            /* Attributes
-            ---------------------------------------------------------------------- */
 
-            // Support: IE<8
-            // Verify that getAttribute really returns attributes and not properties
-            // (excepting IE8 booleans)
+
             support.attributes = assert(function(el) {
                 el.className = "i";
                 return !el.getAttribute("className");
             });
 
-            /* getElement(s)By*
-            ---------------------------------------------------------------------- */
 
-            // Check if getElementsByTagName("*") returns only elements
+
+
             support.getElementsByTagName = assert(function(el) {
                 el.appendChild(document.createComment(""));
                 return !el.getElementsByTagName("*").length;
             });
 
-            // Support: IE<9
+
             support.getElementsByClassName = rnative.test(document.getElementsByClassName);
 
-            // Support: IE<10
-            // Check if getElementById returns elements by name
-            // The broken getElementById methods don't pick up programmatically-set names,
-            // so use a roundabout getElementsByName test
+
+
             support.getById = assert(function(el) {
                 docElem.appendChild(el).id = expando;
                 return !document.getElementsByName || !document.getElementsByName(expando).length;
             });
 
-            // ID filter and find
+
             if (support.getById) {
                 Expr.filter["ID"] = function(id) {
                     var attrId = id.replace(runescape, funescape);
@@ -1090,8 +1066,7 @@
                     };
                 };
 
-                // Support: IE 6 - 7 only
-                // getElementById is not reliable as a find shortcut
+
                 Expr.find["ID"] = function(id, context) {
                     if (typeof context.getElementById !== "undefined" && documentIsHTML) {
                         var node, i, elems,
@@ -1099,13 +1074,13 @@
 
                         if (elem) {
 
-                            // Verify the id attribute
+
                             node = elem.getAttributeNode("id");
                             if (node && node.value === id) {
                                 return [elem];
                             }
 
-                            // Fall back on getElementsByName
+
                             elems = context.getElementsByName(id);
                             i = 0;
                             while ((elem = elems[i++])) {
@@ -1121,13 +1096,13 @@
                 };
             }
 
-            // Tag
+
             Expr.find["TAG"] = support.getElementsByTagName ?
                 function(tag, context) {
                     if (typeof context.getElementsByTagName !== "undefined") {
                         return context.getElementsByTagName(tag);
 
-                        // DocumentFragment nodes don't have gEBTN
+
                     } else if (support.qsa) {
                         return context.querySelectorAll(tag);
                     }
@@ -1137,10 +1112,10 @@
                     var elem,
                         tmp = [],
                         i = 0,
-                        // By happy coincidence, a (broken) gEBTN appears on DocumentFragment nodes too
+
                         results = context.getElementsByTagName(tag);
 
-                    // Filter out possible comments
+
                     if (tag === "*") {
                         while ((elem = results[i++])) {
                             if (elem.nodeType === 1) {
@@ -1153,63 +1128,48 @@
                     return results;
                 };
 
-            // Class
+
             Expr.find["CLASS"] = support.getElementsByClassName && function(className, context) {
                 if (typeof context.getElementsByClassName !== "undefined" && documentIsHTML) {
                     return context.getElementsByClassName(className);
                 }
             };
 
-            /* QSA/matchesSelector
-            ---------------------------------------------------------------------- */
 
-            // QSA and matchesSelector support
 
-            // matchesSelector(:active) reports false when true (IE9/Opera 11.5)
+
             rbuggyMatches = [];
 
-            // qSa(:focus) reports false when true (Chrome 21)
-            // We allow this because of a bug in IE8/9 that throws an error
-            // whenever `document.activeElement` is accessed on an iframe
-            // So, we allow :focus to pass through QSA all the time to avoid the IE error
-            // See https://bugs.jquery.com/ticket/13378
+
+
             rbuggyQSA = [];
 
             if ((support.qsa = rnative.test(document.querySelectorAll))) {
-                // Build QSA regex
-                // Regex strategy adopted from Diego Perini
+
                 assert(function(el) {
-                    // Select is set to empty string on purpose
-                    // This is to test IE's treatment of not explicitly
-                    // setting a boolean content attribute,
-                    // since its presence should be enough
-                    // https://bugs.jquery.com/ticket/12359
+
+
                     docElem.appendChild(el).innerHTML = "<a id='" + expando + "'></a>" +
                         "<select id='" + expando + "-\r\\' msallowcapture=''>" +
                         "<option selected=''></option></select>";
 
-                    // Support: IE8, Opera 11-12.16
-                    // Nothing should be selected when empty strings follow ^= or $= or *=
-                    // The test attribute must be unknown in Opera but "safe" for WinRT
-                    // https://msdn.microsoft.com/en-us/library/ie/hh465388.aspx#attribute_section
+
                     if (el.querySelectorAll("[msallowcapture^='']").length) {
                         rbuggyQSA.push("[*^$]=" + whitespace + "*(?:''|\"\")");
                     }
 
-                    // Support: IE8
-                    // Boolean attributes and "value" are not treated correctly
+
                     if (!el.querySelectorAll("[selected]").length) {
                         rbuggyQSA.push("\\[" + whitespace + "*(?:value|" + booleans + ")");
                     }
 
-                    // Support: Chrome<29, Android<4.4, Safari<7.0+, iOS<7.0+, PhantomJS<1.9.8+
+
                     if (!el.querySelectorAll("[id~=" + expando + "-]").length) {
                         rbuggyQSA.push("~=");
                     }
 
-                    // Webkit/Opera - :checked should return selected option elements
-                    // http://www.w3.org/TR/2011/REC-css3-selectors-20110929/#checked
-                    // IE8 throws error here and will not see later tests
+
+
                     if (!el.querySelectorAll(":checked").length) {
                         rbuggyQSA.push(":checked");
                     }
@@ -8371,13 +8331,13 @@
                     tmp = cur;
                 }
 
-                // Only add window if we got to document (e.g., not plain obj or detached DOM)
+
                 if (tmp === (elem.ownerDocument || document)) {
                     eventPath.push(tmp.defaultView || tmp.parentWindow || window);
                 }
             }
 
-            // Fire handlers on the event path
+
             i = 0;
             while ((cur = eventPath[i++]) && !event.isPropagationStopped()) {
                 lastElement = cur;
@@ -8385,14 +8345,14 @@
                     bubbleType :
                     special.bindType || type;
 
-                // jQuery handler
+
                 handle = (dataPriv.get(cur, "events") || {})[event.type] &&
                     dataPriv.get(cur, "handle");
                 if (handle) {
                     handle.apply(cur, data);
                 }
 
-                // Native handler
+
                 handle = ontype && cur[ontype];
                 if (handle && handle.apply && acceptData(cur)) {
                     event.result = handle.apply(cur, data);
@@ -8403,25 +8363,25 @@
             }
             event.type = type;
 
-            // If nobody prevented the default action, do it now
+
             if (!onlyHandlers && !event.isDefaultPrevented()) {
 
                 if ((!special._default ||
                         special._default.apply(eventPath.pop(), data) === false) &&
                     acceptData(elem)) {
 
-                    // Call a native DOM method on the target with the same name as the event.
-                    // Don't do default actions on window, that's where global variables be (#6170)
+
+
                     if (ontype && isFunction(elem[type]) && !isWindow(elem)) {
 
-                        // Don't re-trigger an onFOO event when we call its FOO() method
+
                         tmp = elem[ontype];
 
                         if (tmp) {
                             elem[ontype] = null;
                         }
 
-                        // Prevent re-triggering of the same event, since we already bubbled it above
+
                         jQuery.event.triggered = type;
 
                         if (event.isPropagationStopped()) {
@@ -8446,8 +8406,7 @@
             return event.result;
         },
 
-        // Piggyback on a donor event to simulate a different one
-        // Used only for `focus(in | out)` events
+
         simulate: function(type, elem, event) {
             var e = jQuery.extend(
                 new jQuery.Event(),
@@ -8478,18 +8437,11 @@
     });
 
 
-    // Support: Firefox <=44
-    // Firefox doesn't have focus(in | out) events
-    // Related ticket - https://bugzilla.mozilla.org/show_bug.cgi?id=687787
-    //
-    // Support: Chrome <=48 - 49, Safari <=9.0 - 9.1
-    // focus(in | out) events fire after focus & blur events,
-    // which is spec violation - http://www.w3.org/TR/DOM-Level-3-Events/#events-focusevent-event-order
-    // Related ticket - https://bugs.chromium.org/p/chromium/issues/detail?id=449857
+
     if (!support.focusin) {
         jQuery.each({ focus: "focusin", blur: "focusout" }, function(orig, fix) {
 
-            // Attach a single capturing handler on the document while someone wants focusin/focusout
+
             var handler = function(event) {
                 jQuery.event.simulate(fix, event.target, jQuery.event.fix(event));
             };
@@ -8527,15 +8479,14 @@
 
 
 
-    // Cross-browser xml parsing
+
     jQuery.parseXML = function(data) {
         var xml;
         if (!data || typeof data !== "string") {
             return null;
         }
 
-        // Support: IE 9 - 11 only
-        // IE throws on parseFromString with invalid input.
+
         try {
             xml = (new window.DOMParser()).parseFromString(data, "text/xml");
         } catch (e) {
@@ -8560,16 +8511,16 @@
 
         if (Array.isArray(obj)) {
 
-            // Serialize array item.
+
             jQuery.each(obj, function(i, v) {
                 if (traditional || rbracket.test(prefix)) {
 
-                    // Treat each array item as a scalar.
+
                     add(prefix, v);
 
                 } else {
 
-                    // Item is non-scalar (array or object), encode its numeric index.
+
                     buildParams(
                         prefix + "[" + (typeof v === "object" && v != null ? i : "") + "]",
                         v,
@@ -8581,26 +8532,25 @@
 
         } else if (!traditional && toType(obj) === "object") {
 
-            // Serialize object item.
+
             for (name in obj) {
                 buildParams(prefix + "[" + name + "]", obj[name], traditional, add);
             }
 
         } else {
 
-            // Serialize scalar item.
+
             add(prefix, obj);
         }
     }
 
-    // Serialize an array of form elements or a set of
-    // key/values into a query string
+
     jQuery.param = function(a, traditional) {
         var prefix,
             s = [],
             add = function(key, valueOrFunction) {
 
-                // If value is a function, invoke it and use its return value
+
                 var value = isFunction(valueOrFunction) ?
                     valueOrFunction() :
                     valueOrFunction;
@@ -8613,24 +8563,23 @@
             return "";
         }
 
-        // If an array was passed in, assume that it is an array of form elements.
+
         if (Array.isArray(a) || (a.jquery && !jQuery.isPlainObject(a))) {
 
-            // Serialize the form elements
+
             jQuery.each(a, function() {
                 add(this.name, this.value);
             });
 
         } else {
 
-            // If traditional, encode the "old" way (the way 1.3.2 or older
-            // did it), otherwise encode params recursively.
+
             for (prefix in a) {
                 buildParams(prefix, a[prefix], traditional, add);
             }
         }
 
-        // Return the resulting serialization
+
         return s.join("&");
     };
 
@@ -8641,14 +8590,14 @@
         serializeArray: function() {
             return this.map(function() {
 
-                    // Can add propHook for "elements" to filter or add form elements
+
                     var elements = jQuery.prop(this, "elements");
                     return elements ? jQuery.makeArray(elements) : this;
                 })
                 .filter(function() {
                     var type = this.type;
 
-                    // Use .is( ":disabled" ) so that fieldset[disabled] works
+
                     return this.name && !jQuery(this).is(":disabled") &&
                         rsubmittable.test(this.nodeName) && !rsubmitterTypes.test(type) &&
                         (this.checked || !rcheckableType.test(type));
@@ -8678,40 +8627,26 @@
         rantiCache = /([?&])_=[^&]*/,
         rheaders = /^(.*?):[ \t]*([^\r\n]*)$/mg,
 
-        // #7653, #8125, #8152: local protocol detection
+
         rlocalProtocol = /^(?:about|app|app-storage|.+-extension|file|res|widget):$/,
         rnoContent = /^(?:GET|HEAD)$/,
         rprotocol = /^\/\//,
 
-        /* Prefilters
-         * 1) They are useful to introduce custom dataTypes (see ajax/jsonp.js for an example)
-         * 2) These are called:
-         *    - BEFORE asking for a transport
-         *    - AFTER param serialization (s.data is a string if s.processData is true)
-         * 3) key is the dataType
-         * 4) the catchall symbol "*" can be used
-         * 5) execution will start with transport dataType and THEN continue down to "*" if needed
-         */
+
+
         prefilters = {},
 
-        /* Transports bindings
-         * 1) key is the dataType
-         * 2) the catchall symbol "*" can be used
-         * 3) selection will start with transport dataType and THEN go to "*" if needed
-         */
-        transports = {},
 
-        // Avoid comment-prolog char sequence (#10098); must appease lint and evade compression
-        allTypes = "*/".concat("*"),
+        concat("*"),
 
-        // Anchor tag for parsing the document origin
+
         originAnchor = document.createElement("a");
     originAnchor.href = location.href;
 
-    // Base "constructor" for jQuery.ajaxPrefilter and jQuery.ajaxTransport
+
     function addToPrefiltersOrTransports(structure) {
 
-        // dataTypeExpression is optional and defaults to "*"
+
         return function(dataTypeExpression, func) {
 
             if (typeof dataTypeExpression !== "string") {
@@ -8725,15 +8660,15 @@
 
             if (isFunction(func)) {
 
-                // For each dataType in the dataTypeExpression
+
                 while ((dataType = dataTypes[i++])) {
 
-                    // Prepend if requested
+
                     if (dataType[0] === "+") {
                         dataType = dataType.slice(1) || "*";
                         (structure[dataType] = structure[dataType] || []).unshift(func);
 
-                        // Otherwise append
+
                     } else {
                         (structure[dataType] = structure[dataType] || []).push(func);
                     }
@@ -8742,7 +8677,7 @@
         };
     }
 
-    // Base inspection function for prefilters and transports
+
     function inspectPrefiltersOrTransports(structure, options, originalOptions, jqXHR) {
 
         var inspected = {},
@@ -8769,9 +8704,7 @@
         return inspect(options.dataTypes[0]) || !inspected["*"] && inspect("*");
     }
 
-    // A special extend for ajax options
-    // that takes "flat" options (not to be deep extended)
-    // Fixes #9887
+
     function ajaxExtend(target, src) {
         var key, deep,
             flatOptions = jQuery.ajaxSettings.flatOptions || {};
@@ -8788,17 +8721,14 @@
         return target;
     }
 
-    /* Handles responses to an ajax request:
-     * - finds the right dataType (mediates between content-type and expected dataType)
-     * - returns the corresponding response
-     */
+
     function ajaxHandleResponses(s, jqXHR, responses) {
 
         var ct, type, finalDataType, firstDataType,
             contents = s.contents,
             dataTypes = s.dataTypes;
 
-        // Remove auto dataType and get content-type in the process
+
         while (dataTypes[0] === "*") {
             dataTypes.shift();
             if (ct === undefined) {
@@ -8806,7 +8736,7 @@
             }
         }
 
-        // Check if we're dealing with a known content-type
+
         if (ct) {
             for (type in contents) {
                 if (contents[type] && contents[type].test(ct)) {
@@ -8816,12 +8746,11 @@
             }
         }
 
-        // Check to see if we have a response for the expected dataType
         if (dataTypes[0] in responses) {
             finalDataType = dataTypes[0];
         } else {
 
-            // Try convertible dataTypes
+
             for (type in responses) {
                 if (!dataTypes[0] || s.converters[type + " " + dataTypes[0]]) {
                     finalDataType = type;
@@ -8832,13 +8761,11 @@
                 }
             }
 
-            // Or just use first one
+
             finalDataType = finalDataType || firstDataType;
         }
 
-        // If we found a dataType
-        // We add the dataType to the list if needed
-        // and return the corresponding response
+
         if (finalDataType) {
             if (finalDataType !== dataTypes[0]) {
                 dataTypes.unshift(finalDataType);
@@ -8847,17 +8774,15 @@
         }
     }
 
-    /* Chain conversions given the request and the original response
-     * Also sets the responseXXX fields on the jqXHR instance
-     */
+
     function ajaxConvert(s, response, jqXHR, isSuccess) {
         var conv2, current, conv, tmp, prev,
             converters = {},
 
-            // Work with a copy of dataTypes in case we need to modify it for conversion
+
             dataTypes = s.dataTypes.slice();
 
-        // Create converters map with lowercased keys
+
         if (dataTypes[1]) {
             for (conv in s.converters) {
                 converters[conv.toLowerCase()] = s.converters[conv];
@@ -8866,14 +8791,14 @@
 
         current = dataTypes.shift();
 
-        // Convert to each sequential dataType
+
         while (current) {
 
             if (s.responseFields[current]) {
                 jqXHR[s.responseFields[current]] = response;
             }
 
-            // Apply the dataFilter if provided
+
             if (!prev && isSuccess && s.dataFilter) {
                 response = s.dataFilter(response, s.dataType);
             }
@@ -8883,35 +8808,35 @@
 
             if (current) {
 
-                // There's only work to do if current dataType is non-auto
+
                 if (current === "*") {
 
                     current = prev;
 
-                    // Convert response if prev dataType is non-auto and differs from current
+
                 } else if (prev !== "*" && prev !== current) {
 
-                    // Seek a direct converter
+
                     conv = converters[prev + " " + current] || converters["* " + current];
 
-                    // If none found, seek a pair
+
                     if (!conv) {
                         for (conv2 in converters) {
 
-                            // If conv2 outputs current
+
                             tmp = conv2.split(" ");
                             if (tmp[1] === current) {
 
-                                // If prev can be converted to accepted input
+
                                 conv = converters[prev + " " + tmp[0]] ||
                                     converters["* " + tmp[0]];
                                 if (conv) {
 
-                                    // Condense equivalence converters
+
                                     if (conv === true) {
                                         conv = converters[conv2];
 
-                                        // Otherwise, insert the intermediate dataType
+
                                     } else if (converters[conv2] !== true) {
                                         current = tmp[0];
                                         dataTypes.unshift(tmp[1]);
@@ -8922,10 +8847,10 @@
                         }
                     }
 
-                    // Apply converter (if not an equivalence)
+
                     if (conv !== true) {
 
-                        // Unless errors are allowed to bubble, catch and return them
+
                         if (conv && s.throws) {
                             response = conv(response);
                         } else {
@@ -8948,10 +8873,10 @@
 
     jQuery.extend({
 
-        // Counter for holding the number of active queries
+
         active: 0,
 
-        // Last-Modified header cache for next request
+
         lastModified: {},
         etag: {},
 
@@ -8962,21 +8887,9 @@
             global: true,
             processData: true,
             async: true,
-            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8"
 
-            /*
-            timeout: 0,
-            data: null,
-            dataType: null,
-            username: null,
-            password: null,
-            cache: null,
-            throws: false,
-            traditional: false,
-            headers: {},
-            */
-
-            accepts: {
+                accepts: {
                 "*": allTypes,
                 text: "text/plain",
                 html: "text/html",
@@ -8996,59 +8909,55 @@
                 json: "responseJSON"
             },
 
-            // Data converters
-            // Keys separate source (or catchall "*") and destination types with a single space
+
             converters: {
 
-                // Convert anything to text
+
                 "* text": String,
 
-                // Text to html (true = no transformation)
+
                 "text html": true,
 
-                // Evaluate text as a json expression
+
                 "text json": JSON.parse,
 
-                // Parse text as xml
+
                 "text xml": jQuery.parseXML
             },
 
-            // For options that shouldn't be deep extended:
-            // you can add your own custom options here if
-            // and when you create one that shouldn't be
-            // deep extended (see ajaxExtend)
+
+
             flatOptions: {
                 url: true,
                 context: true
             }
         },
 
-        // Creates a full fledged settings object into target
-        // with both ajaxSettings and settings fields.
-        // If target is omitted, writes into ajaxSettings.
+
+
         ajaxSetup: function(target, settings) {
             return settings ?
 
-                // Building a settings object
+
                 ajaxExtend(ajaxExtend(target, jQuery.ajaxSettings), settings) :
 
-                // Extending ajaxSettings
+
                 ajaxExtend(jQuery.ajaxSettings, target);
         },
 
         ajaxPrefilter: addToPrefiltersOrTransports(prefilters),
         ajaxTransport: addToPrefiltersOrTransports(transports),
 
-        // Main method
+
         ajax: function(url, options) {
 
-            // If url is an object, simulate pre-1.5 signature
+
             if (typeof url === "object") {
                 options = url;
                 url = undefined;
             }
 
-            // Force options to be an object
+
             options = options || {};
 
             var transport,
@@ -9056,59 +8965,59 @@
                 // URL without anti-cache param
                 cacheURL,
 
-                // Response headers
+
                 responseHeadersString,
                 responseHeaders,
 
-                // timeout handle
+
                 timeoutTimer,
 
-                // Url cleanup var
+
                 urlAnchor,
 
-                // Request state (becomes false upon send and true upon completion)
+
                 completed,
 
-                // To know if global events are to be dispatched
+
                 fireGlobals,
 
-                // Loop variable
+
                 i,
 
-                // uncached part of the url
+
                 uncached,
 
-                // Create the final options object
+
                 s = jQuery.ajaxSetup({}, options),
 
-                // Callbacks context
+
                 callbackContext = s.context || s,
 
-                // Context for global events is callbackContext if it is a DOM node or jQuery collection
+
                 globalEventContext = s.context &&
                 (callbackContext.nodeType || callbackContext.jquery) ?
                 jQuery(callbackContext) :
                 jQuery.event,
 
-                // Deferreds
+
                 deferred = jQuery.Deferred(),
                 completeDeferred = jQuery.Callbacks("once memory"),
 
-                // Status-dependent callbacks
+
                 statusCode = s.statusCode || {},
 
-                // Headers (they are sent all at once)
+
                 requestHeaders = {},
                 requestHeadersNames = {},
 
-                // Default abort message
+
                 strAbort = "canceled",
 
-                // Fake xhr
+
                 jqXHR = {
                     readyState: 0,
 
-                    // Builds headers hashtable if needed
+
                     getResponseHeader: function(key) {
                         var match;
                         if (completed) {
@@ -9125,12 +9034,12 @@
                         return match == null ? null : match.join(", ");
                     },
 
-                    // Raw string
+
                     getAllResponseHeaders: function() {
                         return completed ? responseHeadersString : null;
                     },
 
-                    // Caches the header
+
                     setRequestHeader: function(name, value) {
                         if (completed == null) {
                             name = requestHeadersNames[name.toLowerCase()] =
@@ -9140,7 +9049,7 @@
                         return this;
                     },
 
-                    // Overrides response content-type header
+
                     overrideMimeType: function(type) {
                         if (completed == null) {
                             s.mimeType = type;
@@ -9148,17 +9057,17 @@
                         return this;
                     },
 
-                    // Status-dependent callbacks
+
                     statusCode: function(map) {
                         var code;
                         if (map) {
                             if (completed) {
 
-                                // Execute the appropriate callbacks
+
                                 jqXHR.always(map[jqXHR.status]);
                             } else {
 
-                                // Lazy-add the new callbacks in a way that preserves old ones
+
                                 for (code in map) {
                                     statusCode[code] = [statusCode[code], map[code]];
                                 }
@@ -9167,7 +9076,7 @@
                         return this;
                     },
 
-                    // Cancel the request
+
                     abort: function(statusText) {
                         var finalText = statusText || strAbort;
                         if (transport) {
@@ -9178,107 +9087,96 @@
                     }
                 };
 
-            // Attach deferreds
+
             deferred.promise(jqXHR);
 
-            // Add protocol if not provided (prefilters might expect it)
-            // Handle falsy url in the settings object (#10093: consistency with old signature)
-            // We also use the url parameter if available
+
             s.url = ((url || s.url || location.href) + "")
                 .replace(rprotocol, location.protocol + "//");
 
-            // Alias method option to type as per ticket #12004
+
             s.type = options.method || options.type || s.method || s.type;
 
-            // Extract dataTypes list
+
             s.dataTypes = (s.dataType || "*").toLowerCase().match(rnothtmlwhite) || [""];
 
-            // A cross-domain request is in order when the origin doesn't match the current origin.
+
             if (s.crossDomain == null) {
                 urlAnchor = document.createElement("a");
 
-                // Support: IE <=8 - 11, Edge 12 - 15
-                // IE throws exception on accessing the href property if url is malformed,
-                // e.g. http://example.com:80x/
+
                 try {
                     urlAnchor.href = s.url;
 
-                    // Support: IE <=8 - 11 only
-                    // Anchor's host property isn't correctly set when s.url is relative
+
                     urlAnchor.href = urlAnchor.href;
                     s.crossDomain = originAnchor.protocol + "//" + originAnchor.host !==
                         urlAnchor.protocol + "//" + urlAnchor.host;
                 } catch (e) {
 
-                    // If there is an error parsing the URL, assume it is crossDomain,
-                    // it can be rejected by the transport if it is invalid
+
                     s.crossDomain = true;
                 }
             }
 
-            // Convert data if not already a string
+
             if (s.data && s.processData && typeof s.data !== "string") {
                 s.data = jQuery.param(s.data, s.traditional);
             }
 
-            // Apply prefilters
+
             inspectPrefiltersOrTransports(prefilters, s, options, jqXHR);
 
-            // If request was aborted inside a prefilter, stop there
+
             if (completed) {
                 return jqXHR;
             }
 
-            // We can fire global events as of now if asked to
-            // Don't fire events if jQuery.event is undefined in an AMD-usage scenario (#15118)
+
             fireGlobals = jQuery.event && s.global;
 
-            // Watch for a new set of requests
+
             if (fireGlobals && jQuery.active++ === 0) {
                 jQuery.event.trigger("ajaxStart");
             }
 
-            // Uppercase the type
+
             s.type = s.type.toUpperCase();
 
-            // Determine if request has content
+
             s.hasContent = !rnoContent.test(s.type);
 
-            // Save the URL in case we're toying with the If-Modified-Since
-            // and/or If-None-Match header later on
-            // Remove hash to simplify url manipulation
+
             cacheURL = s.url.replace(rhash, "");
 
-            // More options handling for requests with no content
-            if (!s.hasContent) {
 
-                // Remember the hash so we can put it back
-                uncached = s.url.slice(cacheURL.length);
+            if (!s.hasContent uncached = s.url.slice(cacheURL.length);
 
-                // If data is available and should be processed, append data to url
+
                 if (s.data && (s.processData || typeof s.data === "string")) {
                     cacheURL += (rquery.test(cacheURL) ? "&" : "?") + s.data;
 
-                    // #9682: remove data so that it's not used in an eventual retry
+
                     delete s.data;
                 }
 
-                // Add or update anti-cache param if needed
+
                 if (s.cache === false) {
                     cacheURL = cacheURL.replace(rantiCache, "$1");
                     uncached = (rquery.test(cacheURL) ? "&" : "?") + "_=" + (nonce++) + uncached;
                 }
 
-                // Put hash and anti-cache on the URL that will be requested (gh-1732)
+
                 s.url = cacheURL + uncached;
 
-                // Change '%20' to '+' if this is encoded form body content (gh-2658)
-            } else if (s.data && s.processData &&
+
+            }
+            else if (s.data && s.processData &&
                 (s.contentType || "").indexOf("application/x-www-form-urlencoded") === 0) {
                 s.data = s.data.replace(r20, "+");
             }
 
-            // Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
+
             if (s.ifModified) {
                 if (jQuery.lastModified[cacheURL]) {
                     jqXHR.setRequestHeader("If-Modified-Since", jQuery.lastModified[cacheURL]);
@@ -9288,12 +9186,12 @@
                 }
             }
 
-            // Set the correct header, if data is being sent
+
             if (s.data && s.hasContent && s.contentType !== false || options.contentType) {
                 jqXHR.setRequestHeader("Content-Type", s.contentType);
             }
 
-            // Set the Accepts header for the server, depending on the dataType
+
             jqXHR.setRequestHeader(
                 "Accept",
                 s.dataTypes[0] && s.accepts[s.dataTypes[0]] ?
@@ -9302,47 +9200,47 @@
                 s.accepts["*"]
             );
 
-            // Check for headers option
+
             for (i in s.headers) {
                 jqXHR.setRequestHeader(i, s.headers[i]);
             }
 
-            // Allow custom headers/mimetypes and early abort
+
             if (s.beforeSend &&
                 (s.beforeSend.call(callbackContext, jqXHR, s) === false || completed)) {
 
-                // Abort if not done already and return
+
                 return jqXHR.abort();
             }
 
-            // Aborting is no longer a cancellation
+
             strAbort = "abort";
 
-            // Install callbacks on deferreds
+
             completeDeferred.add(s.complete);
             jqXHR.done(s.success);
             jqXHR.fail(s.error);
 
-            // Get transport
+
             transport = inspectPrefiltersOrTransports(transports, s, options, jqXHR);
 
-            // If no transport, we auto-abort
+
             if (!transport) {
                 done(-1, "No Transport");
             } else {
                 jqXHR.readyState = 1;
 
-                // Send global event
+
                 if (fireGlobals) {
                     globalEventContext.trigger("ajaxSend", [jqXHR, s]);
                 }
 
-                // If request was aborted inside ajaxSend, stop there
+
                 if (completed) {
                     return jqXHR;
                 }
 
-                // Timeout
+
                 if (s.async && s.timeout > 0) {
                     timeoutTimer = window.setTimeout(function() {
                         jqXHR.abort("timeout");
@@ -9354,58 +9252,57 @@
                     transport.send(requestHeaders, done);
                 } catch (e) {
 
-                    // Rethrow post-completion exceptions
+
                     if (completed) {
                         throw e;
                     }
 
-                    // Propagate others as results
+
                     done(-1, e);
                 }
             }
 
-            // Callback for when everything is done
+
             function done(status, nativeStatusText, responses, headers) {
                 var isSuccess, success, error, response, modified,
                     statusText = nativeStatusText;
 
-                // Ignore repeat invocations
+
                 if (completed) {
                     return;
                 }
 
                 completed = true;
 
-                // Clear timeout if it exists
+
                 if (timeoutTimer) {
                     window.clearTimeout(timeoutTimer);
                 }
 
-                // Dereference transport for early garbage collection
-                // (no matter how long the jqXHR object will be used)
+
                 transport = undefined;
 
-                // Cache response headers
+
                 responseHeadersString = headers || "";
 
-                // Set readyState
+
                 jqXHR.readyState = status > 0 ? 4 : 0;
 
-                // Determine if successful
+
                 isSuccess = status >= 200 && status < 300 || status === 304;
 
-                // Get response data
+
                 if (responses) {
                     response = ajaxHandleResponses(s, jqXHR, responses);
                 }
 
-                // Convert no matter what (that way responseXXX fields are always set)
+
                 response = ajaxConvert(s, response, jqXHR, isSuccess);
 
-                // If successful, handle type chaining
+
                 if (isSuccess) {
 
-                    // Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
+
                     if (s.ifModified) {
                         modified = jqXHR.getResponseHeader("Last-Modified");
                         if (modified) {
@@ -9417,15 +9314,15 @@
                         }
                     }
 
-                    // if no content
+
                     if (status === 204 || s.type === "HEAD") {
                         statusText = "nocontent";
 
-                        // if not modified
+
                     } else if (status === 304) {
                         statusText = "notmodified";
 
-                        // If we have data, let's convert it
+
                     } else {
                         statusText = response.state;
                         success = response.data;
@@ -9434,7 +9331,7 @@
                     }
                 } else {
 
-                    // Extract error from statusText and normalize for non-aborts
+
                     error = statusText;
                     if (status || !statusText) {
                         statusText = "error";
@@ -9444,18 +9341,18 @@
                     }
                 }
 
-                // Set data for the fake xhr object
+
                 jqXHR.status = status;
                 jqXHR.statusText = (nativeStatusText || statusText) + "";
 
-                // Success/Error
+
                 if (isSuccess) {
                     deferred.resolveWith(callbackContext, [success, statusText, jqXHR]);
                 } else {
                     deferred.rejectWith(callbackContext, [jqXHR, statusText, error]);
                 }
 
-                // Status-dependent callbacks
+
                 jqXHR.statusCode(statusCode);
                 statusCode = undefined;
 
@@ -9463,13 +9360,13 @@
                     globalEventContext.trigger(isSuccess ? "ajaxSuccess" : "ajaxError", [jqXHR, s, isSuccess ? success : error]);
                 }
 
-                // Complete
+
                 completeDeferred.fireWith(callbackContext, [jqXHR, statusText]);
 
                 if (fireGlobals) {
                     globalEventContext.trigger("ajaxComplete", [jqXHR, s]);
 
-                    // Handle the global AJAX counter
+
                     if (!(--jQuery.active)) {
                         jQuery.event.trigger("ajaxStop");
                     }
@@ -9491,14 +9388,14 @@
     jQuery.each(["get", "post"], function(i, method) {
         jQuery[method] = function(url, data, callback, type) {
 
-            // Shift arguments if data argument was omitted
+
             if (isFunction(data)) {
                 type = type || callback;
                 callback = data;
                 data = undefined;
             }
 
-            // The url can be an options object (which then must have .url)
+
             return jQuery.ajax(jQuery.extend({
                 url: url,
                 type: method,
@@ -9514,16 +9411,14 @@
         return jQuery.ajax({
             url: url,
 
-            // Make this explicit, since user can override this through ajaxSetup (#11264)
+
             type: "GET",
             dataType: "script",
             cache: true,
             async: false,
             global: false,
 
-            // Only evaluate the response if it is successful (gh-4126)
-            // dataFilter is not invoked for failure responses, so using it instead
-            // of the default converter is kludgy but it works.
+
             converters: {
                 "text script": function() {}
             },
@@ -9543,7 +9438,7 @@
                     html = html.call(this[0]);
                 }
 
-                // The elements to wrap the target around
+
                 wrap = jQuery(html, this[0].ownerDocument).eq(0).clone(true);
 
                 if (this[0].parentNode) {
@@ -9619,11 +9514,10 @@
 
     var xhrSuccessStatus = {
 
-            // File protocol always yields status code 0, assume 200
+
             0: 200,
 
-            // Support: IE <=9 only
-            // #1450: sometimes IE returns 1223 when it should be 204
+
             1223: 204
         },
         xhrSupported = jQuery.ajaxSettings.xhr();
@@ -9634,7 +9528,7 @@
     jQuery.ajaxTransport(function(options) {
         var callback, errorCallback;
 
-        // Cross domain only allowed if supported through XMLHttpRequest
+
         if (support.cors || xhrSupported && !options.crossDomain) {
             return {
                 send: function(headers, complete) {
@@ -9649,33 +9543,30 @@
                         options.password
                     );
 
-                    // Apply custom fields if provided
+
                     if (options.xhrFields) {
                         for (i in options.xhrFields) {
                             xhr[i] = options.xhrFields[i];
                         }
                     }
 
-                    // Override mime type if needed
+
                     if (options.mimeType && xhr.overrideMimeType) {
                         xhr.overrideMimeType(options.mimeType);
                     }
 
-                    // X-Requested-With header
-                    // For cross-domain requests, seeing as conditions for a preflight are
-                    // akin to a jigsaw puzzle, we simply never set it to be sure.
-                    // (it can always be set on a per-request basis or even using ajaxSetup)
-                    // For same-domain requests, won't change header if already provided.
+
+
                     if (!options.crossDomain && !headers["X-Requested-With"]) {
                         headers["X-Requested-With"] = "XMLHttpRequest";
                     }
 
-                    // Set headers
+
                     for (i in headers) {
                         xhr.setRequestHeader(i, headers[i]);
                     }
 
-                    // Callback
+
                     callback = function(type) {
                         return function() {
                             if (callback) {
@@ -9687,15 +9578,14 @@
                                     xhr.abort();
                                 } else if (type === "error") {
 
-                                    // Support: IE <=9 only
-                                    // On a manual native abort, IE9 throws
-                                    // errors on any property access that is not readyState
+
+
                                     if (typeof xhr.status !== "number") {
                                         complete(0, "error");
                                     } else {
                                         complete(
 
-                                            // File: protocol always yields status 0; see #8605, #14207
+
                                             xhr.status,
                                             xhr.statusText
                                         );
@@ -9705,9 +9595,7 @@
                                         xhrSuccessStatus[xhr.status] || xhr.status,
                                         xhr.statusText,
 
-                                        // Support: IE <=9 only
-                                        // IE9 has no XHR2 but throws on binary (trac-11426)
-                                        // For XHR2 non-text, let the caller handle it (gh-2498)
+
                                         (xhr.responseType || "text") !== "text" ||
                                         typeof xhr.responseText !== "string" ? { binary: xhr.response } : { text: xhr.responseText },
                                         xhr.getAllResponseHeaders()
@@ -9717,25 +9605,21 @@
                         };
                     };
 
-                    // Listen to events
+
                     xhr.onload = callback();
                     errorCallback = xhr.onerror = xhr.ontimeout = callback("error");
 
-                    // Support: IE 9 only
-                    // Use onreadystatechange to replace onabort
-                    // to handle uncaught aborts
+
                     if (xhr.onabort !== undefined) {
                         xhr.onabort = errorCallback;
                     } else {
                         xhr.onreadystatechange = function() {
 
-                            // Check readyState before timeout as it changes
+
                             if (xhr.readyState === 4) {
 
-                                // Allow onerror to be called first,
-                                // but that will not handle a native abort
-                                // Also, save errorCallback to a variable
-                                // as xhr.onerror cannot be accessed
+
+
                                 window.setTimeout(function() {
                                     if (callback) {
                                         errorCallback();
@@ -9745,16 +9629,16 @@
                         };
                     }
 
-                    // Create the abort callback
+
                     callback = callback("abort");
 
                     try {
 
-                        // Do send the request (this may raise an exception)
+
                         xhr.send(options.hasContent && options.data || null);
                     } catch (e) {
 
-                        // #14683: Only rethrow if this hasn't been notified as an error yet
+
                         if (callback) {
                             throw e;
                         }
@@ -9773,14 +9657,14 @@
 
 
 
-    // Prevent auto-execution of scripts when no explicit dataType was provided (See gh-2432)
+
     jQuery.ajaxPrefilter(function(s) {
         if (s.crossDomain) {
             s.contents.script = false;
         }
     });
 
-    // Install script dataType
+
     jQuery.ajaxSetup({
         accepts: {
             script: "text/javascript, application/javascript, " +
@@ -9797,7 +9681,7 @@
         }
     });
 
-    // Handle cache's special case and crossDomain
+
     jQuery.ajaxPrefilter("script", function(s) {
         if (s.cache === undefined) {
             s.cache = false;
@@ -9807,10 +9691,10 @@
         }
     });
 
-    // Bind script tag hack transport
+
     jQuery.ajaxTransport("script", function(s) {
 
-        // This transport only deals with cross domain or forced-by-attrs requests
+
         if (s.crossDomain || s.scriptAttrs) {
             var script, callback;
             return {
@@ -9826,7 +9710,7 @@
                             }
                         });
 
-                    // Use native DOM manipulation to avoid our domManip AJAX trickery
+
                     document.head.appendChild(script[0]);
                 },
                 abort: function() {
@@ -9844,7 +9728,7 @@
     var oldCallbacks = [],
         rjsonp = /(=)\?(?=&|$)|\?\?/;
 
-    // Default jsonp settings
+
     jQuery.ajaxSetup({
         jsonp: "callback",
         jsonpCallback: function() {
@@ -9854,7 +9738,7 @@
         }
     });
 
-    // Detect, normalize options and install callbacks for jsonp requests
+
     jQuery.ajaxPrefilter("json jsonp", function(s, originalSettings, jqXHR) {
 
         var callbackName, overwritten, responseContainer,
@@ -9866,22 +9750,22 @@
                 rjsonp.test(s.data) && "data"
             );
 
-        // Handle iff the expected data type is "jsonp" or we have a parameter to set
+
         if (jsonProp || s.dataTypes[0] === "jsonp") {
 
-            // Get callback name, remembering preexisting value associated with it
+
             callbackName = s.jsonpCallback = isFunction(s.jsonpCallback) ?
                 s.jsonpCallback() :
                 s.jsonpCallback;
 
-            // Insert callback into url or form data
+
             if (jsonProp) {
                 s[jsonProp] = s[jsonProp].replace(rjsonp, "$1" + callbackName);
             } else if (s.jsonp !== false) {
                 s.url += (rquery.test(s.url) ? "&" : "?") + s.jsonp + "=" + callbackName;
             }
 
-            // Use data converter to retrieve json after script execution
+
             s.converters["script json"] = function() {
                 if (!responseContainer) {
                     jQuery.error(callbackName + " was not called");
@@ -9889,38 +9773,37 @@
                 return responseContainer[0];
             };
 
-            // Force json dataType
+
             s.dataTypes[0] = "json";
 
-            // Install callback
+
             overwritten = window[callbackName];
             window[callbackName] = function() {
                 responseContainer = arguments;
             };
 
-            // Clean-up function (fires after converters)
+
             jqXHR.always(function() {
 
-                // If previous value didn't exist - remove it
                 if (overwritten === undefined) {
                     jQuery(window).removeProp(callbackName);
 
-                    // Otherwise restore preexisting value
+
                 } else {
                     window[callbackName] = overwritten;
                 }
 
-                // Save back as free
+
                 if (s[callbackName]) {
 
-                    // Make sure that re-using the options doesn't screw things around
+
                     s.jsonpCallback = originalSettings.jsonpCallback;
 
-                    // Save the callback name for future use
+
                     oldCallbacks.push(callbackName);
                 }
 
-                // Call if it was a function and we have a response
+
                 if (responseContainer && isFunction(overwritten)) {
                     overwritten(responseContainer[0]);
                 }
@@ -9928,7 +9811,7 @@
                 responseContainer = overwritten = undefined;
             });
 
-            // Delegate to script
+
             return "script";
         }
     });
@@ -9936,11 +9819,7 @@
 
 
 
-    // Support: Safari 8 only
-    // In Safari 8 documents created via document.implementation.createHTMLDocument
-    // collapse sibling forms: the second one becomes a child of the first one.
-    // Because of that, this security measure has to be disabled in Safari 8.
-    // https://bugs.webkit.org/show_bug.cgi?id=137337
+
     support.createHTMLDocument = (function() {
         var body = document.implementation.createHTMLDocument("").body;
         body.innerHTML = "<form></form><form></form>";
@@ -9948,10 +9827,7 @@
     })();
 
 
-    // Argument "data" should be string of html
-    // context (optional): If specified, the fragment will be created in this context,
-    // defaults to document
-    // keepScripts (optional): If true, will include scripts passed in the html string
+
     jQuery.parseHTML = function(data, context, keepScripts) {
         if (typeof data !== "string") {
             return [];
@@ -9965,14 +9841,11 @@
 
         if (!context) {
 
-            // Stop scripts or inline event handlers from being executed immediately
-            // by using document.implementation
+
             if (support.createHTMLDocument) {
                 context = document.implementation.createHTMLDocument("");
 
-                // Set the base href for the created document
-                // so any parsed elements with URLs
-                // are based on the document's URL (gh-2965)
+
                 base = context.createElement("base");
                 base.href = document.location.href;
                 context.head.appendChild(base);
@@ -9984,7 +9857,7 @@
         parsed = rsingleTag.exec(data);
         scripts = !keepScripts && [];
 
-        // Single tag
+
         if (parsed) {
             return [context.createElement(parsed[1])];
         }
@@ -10012,46 +9885,37 @@
             url = url.slice(0, off);
         }
 
-        // If it's a function
+
         if (isFunction(params)) {
 
-            // We assume that it's the callback
+
             callback = params;
             params = undefined;
 
-            // Otherwise, build a param string
+
         } else if (params && typeof params === "object") {
             type = "POST";
         }
 
-        // If we have elements to modify, make the request
         if (self.length > 0) {
             jQuery.ajax({
                 url: url,
 
-                // If "type" variable is undefined, then "GET" method will be used.
-                // Make value of this field explicit since
-                // user can override it through ajaxSetup method
+
                 type: type || "GET",
                 dataType: "html",
                 data: params
             }).done(function(responseText) {
 
-                // Save response for use in complete callback
+
                 response = arguments;
 
-                self.html(selector ?
+                self.html(selector jQuery("<div>").append(jQuery.parseHTML(responseText)).find(selector):
 
-                    // If a selector was specified, locate the right elements in a dummy div
-                    // Exclude scripts to avoid IE 'Permission Denied' errors
-                    jQuery("<div>").append(jQuery.parseHTML(responseText)).find(selector) :
 
-                    // Otherwise use the full result
                     responseText);
 
-                // If the request succeeds, this function gets "data", "status", "jqXHR"
-                // but they are ignored because response was set above.
-                // If it fails, this function gets "jqXHR", "status", "error"
+
             }).always(callback && function(jqXHR, status) {
                 self.each(function() {
                     callback.apply(this, response || [jqXHR.responseText, status, jqXHR]);
@@ -10458,18 +10322,7 @@
 
 
 
-    // Register as a named AMD module, since jQuery can be concatenated with other
-    // files that may use define, but not via a proper concatenation script that
-    // understands anonymous AMD modules. A named AMD is safest and most robust
-    // way to register. Lowercase jquery is used because AMD module names are
-    // derived from file names, and jQuery is normally delivered in a lowercase
-    // file name. Do this after creating the global so that if an AMD module wants
-    // to call noConflict to hide this version of jQuery, it will work.
 
-    // Note that for maximum portability, libraries that are not jQuery should
-    // declare themselves as anonymous modules, and avoid setting a global if an
-    // AMD loader is present. jQuery is a special case. For more information, see
-    // https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
 
     if (typeof define === "function" && define.amd) {
         define("jquery", [], function() {
@@ -10482,10 +10335,9 @@
 
     var
 
-    // Map over jQuery in case of overwrite
+
         _jQuery = window.jQuery,
 
-        // Map over the $ in case of overwrite
         _$ = window.$;
 
     jQuery.noConflict = function(deep) {
@@ -10500,9 +10352,7 @@
         return jQuery;
     };
 
-    // Expose jQuery and $ identifiers, even in AMD
-    // (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
-    // and CommonJS for browser emulators (#13566)
+
     if (!noGlobal) {
         window.jQuery = window.$ = jQuery;
     }
