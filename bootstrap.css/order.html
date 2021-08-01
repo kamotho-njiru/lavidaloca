@@ -9,96 +9,97 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="images/jpg" href="images/pizza.jpg">
     <link rel="stylesheet" href="bootstap.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
 
-    <head>
+<body>
+    <div class="container-fluid">
 
-        <body>
-            <div class="container-fluid">
-
-                <div id="order">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i></button> -->
-                    <a href="index.html"><button type="submit" form="form1" value="Submit" id="btn2"> <i class="fa fa-home"
+        <div id="order">
+            <!-- <button type="submit" form="form1" value="Submit" id="cart">CART&nbsp; &nbsp; <i class="fa fa-shopping-cart" aria-hidden="true"></i></button> -->
+            <a href="index.html"><button type="submit" form="form1" value="Submit" id="btn2"> <i class="fa fa-home"
                         aria-hidden="true"></i>&nbsp; HOME </button></a>
-                    <h1>WELCOME TO THE BEST PIZZA IN TOWN</h1>
-                </div>
-                <h3>ORDER HERE</h3>
-                <div class="row" id="piz">
+            <h1>WELCOME TO THE BEST FOODS AT PIZZA INN</h1>
+        </div>
+        <h3>ORDER HERE</h3>
+        <div class="row" id="piz">
 
-                    <div class="col-md-4">
-                        <h4>CRUSTS</h4>
-                        <img src="https://bit.ly/2CyF9hb" height="250px" width="250px">
-                        <button type="submit" form="form1" value="Submit">ADD TO CART&nbsp; &nbsp; <i class="fa fa-shopping-bag"
+            <div class="col-md-4">
+                <h4>CRUSTS</h4>
+                <img src="https://bit.ly/2CyF9hb" height="250px" width="250px">
+                <button type="submit" form="form1" value="Submit">ADD TO CART&nbsp; &nbsp; <i class="fa fa-shopping-bag"
                         aria-hidden="true"></i>&nbsp; &nbsp;
 
                 </button>
-                    </div>
-                    <div class="col-md-4">
-                        <h4>TOPPINGS</h4>
-                        <img src="https://bit.ly/32wmEVa" height="250px" width="250px">
-                        <button type="submit" form="form1" value="Submit" id="ok">ADD TO CART&nbsp; &nbsp; <i
+            </div>
+            <div class="col-md-4">
+                <h4>TOPPINGS</h4>
+                <img src="https://bit.ly/32wmEVa" height="250px" width="250px">
+                <button type="submit" form="form1" value="Submit" id="ok">ADD TO CART&nbsp; &nbsp; <i
                         class="fa fa-shopping-bag" aria-hidden="true"></i>&nbsp; &nbsp;</button>
-                    </div>
-                    <div class="col-md-4">
-                        <h4>SPECIAL OFFER PACKAGE</h4>
-                        <img src="https://bit.ly/2WTu8QT" height="250px" width="250px">
-                        <button type="submit" form="form1" value="Submit">ADD TO CART&nbsp; &nbsp; <i class="fa fa-shopping-bag"
+            </div>
+            <div class="col-md-4">
+                <h4>SPECIAL OFFER PACKAGE</h4>
+                <img src="https://bit.ly/2WTu8QT" height="250px" width="250px">
+                <button type="submit" form="form1" value="Submit">ADD TO CART&nbsp; &nbsp; <i class="fa fa-shopping-bag"
                         aria-hidden="true"></i>&nbsp; &nbsp;</button>
-                    </div>
-                    <div class="container">
-                        <div id="form">
-                            <form>
-                                <div class="row">
-                                    <div class="col-md-3">
+            </div>
+            <div class="container">
+                <div id="form">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-3">
 
-                                        <label for="size" style="color:orange">Size</label>
-                                        <select class="browser-default custom-select" id="size">
+                                <label for="size" style="color:orange">Size</label>
+                                <select class="browser-default custom-select" id="size">
                                     <option value="">Choose option</option>
                                     <option value="1500">Large =ksh 1500</option>
                                     <option value="1000">Medium =ksh 1000</option>
                                     <option value="500">Small= ksh500</option>
                                 </select><br>
-                                    </div>
-                                    <div class="col-md-3">
+                            </div>
+                            <div class="col-md-3">
 
-                                        <label for="crust" style="color:orange">Crust</label>
-                                        <select class="browser-default custom-select" id="crust">
+                                <label for="crust" style="color:orange">Crust</label>
+                                <select class="browser-default custom-select" id="crust">
                                     <option value="">Choose option</option>
                                     <option value="150">Crispy =ksh 150</option>
                                     <option value="100">Stuffed=ksh 100</option>
                                     <option value="70">Gluten-free =ksh 70</option>
                                 </select><br>
-                                    </div>
-                                    <div class="col-md-3">
+                            </div>
+                            <div class="col-md-3">
 
-                                        <label for="toppings" name="toppings" style="color:orange">Toppings</label>
-                                        <select class="browser-default custom-select" id="toppings">
+                                <label for="toppings" name="toppings" style="color:orange">Toppings</label>
+                                <select class="browser-default custom-select" id="toppings">
                                     <option value="">Choose option</option>
                                     <option value="60">Cheese =ksh60</option>
                                     <option value="60">pepperoni =ksh60
+                                        <!-- <option value="60">Cheese =ksh60</option> -->
+                                        <!-- <option value="60">pepperoni =ksh60</option> -->
                                     <option value="60">onions =ksh60</option>
                                 </select>
-                                    </div>
-                                    <div class="col-md-3">
+                            </div>
+                            <div class="col-md-3">
 
-                                        <label for="quantity" style="color: orange">Quantity</label>
-                                        <input class="form-control" type="text" name="pizza" id="quan" placeholder="0" max="" min="0">
-                                    </div><br><br><br><br><br><br>
-                                    <button class="btn btn-success mx-auto d-block submit" type="submit" id="submit2" onclick="getTotalAmount();"><strong>Checkout</strong></button>
-                                </div>
-                            </form>
-
-
+                                <label for="quantity" style="color: orange">Quantity</label>
+                                <input class="form-control" type="text" name="pizza" id="quan" placeholder="0" max="" min="0">
+                            </div><br><br><br><br><br><br>
+                            <button class="btn btn-success mx-auto d-block submit" type="submit" id="submit2" onclick="getTotalAmount();"><strong>Checkout</strong></button>
                         </div>
-                    </div>
+                    </form>
+
 
                 </div>
+            </div>
+
+        </div>
 
 
-            </div>
-            </div>
-            <script src="index.js"></script>
-            <script src="jquery.js"></script>
-        </body>
+    </div>
+    </div>
+    <script src="/index.jss"></script>
+    <script src="/jquery.js"></script>
+</body>
 
 </html>
