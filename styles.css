@@ -4,7 +4,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     height: 110vh;
-    background-image: url("/bootstrap.css/ivan-torres-MQUqbmszGGM-unsplash.jpg");
+    background-image: url("bootstrap.css/ivan-torres-MQUqbmszGGM-unsplash.jpg");
 }
 
 #home h1 {
@@ -58,7 +58,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     height: 60vh;
-    background-image: url("../images/pizza.jpg");
+    background-image: url("images/pizza.jpg");
 }
 
 #btn2 {

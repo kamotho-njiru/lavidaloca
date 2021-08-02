@@ -5125,7 +5125,7 @@
                     }
                 }
 
-                // Call the postDispatch hook for the mapped type
+
                 if (special.postDispatch) {
                     special.postDispatch.call(this, event);
                 }
@@ -5139,24 +5139,19 @@
                     delegateCount = handlers.delegateCount,
                     cur = event.target;
 
-                // Find delegate handlers
+
                 if (delegateCount &&
 
-                    // Support: IE <=9
-                    // Black-hole SVG <use> instance trees (trac-13180)
+
                     cur.nodeType &&
 
-                    // Support: Firefox <=42
-                    // Suppress spec-violating clicks indicating a non-primary pointer button (trac-3861)
-                    // https://www.w3.org/TR/DOM-Level-3-Events/#event-type-click
-                    // Support: IE 11 only
-                    // ...but not arrow key "clicks" of radio inputs, which can have `button` -1 (gh-2343)
+
                     !(event.type === "click" && event.button >= 1)) {
 
                     for (; cur !== this; cur = cur.parentNode || this) {
 
-                        // Don't check non-elements (#13208)
-                        // Don't process clicks on disabled elements (#6911, #8165, #11382, #11764)
+
+
                         if (cur.nodeType === 1 && !(event.type === "click" && cur.disabled === true)) {
                             matchedHandlers = [];
                             matchedSelectors = {};
@@ -5232,22 +5227,21 @@
                 },
                 click: {
 
-                    // Utilize native event to ensure correct state for checkable inputs
+
                     setup: function(data) {
 
-                        // For mutual compressibility with _default, replace `this` access with a local var.
-                        // `|| data` is dead code meant only to preserve the variable through minification.
+
                         var el = this || data;
 
-                        // Claim the first handler
+
                         if (rcheckableType.test(el.type) &&
                             el.click && nodeName(el, "input")) {
 
-                            // dataPriv.set( el, "click", ... )
+
                             leverageNative(el, "click", returnTrue);
                         }
 
-                        // Return false to allow normal processing in the caller
+
                         return false;
                     },
                     trigger: function(data) {
@@ -5363,15 +5357,14 @@
                         dataPriv.set(this, type, {
                             value: jQuery.event.trigger(
 
-                                // Support: IE <=9 - 11+
-                                // Extend with the prototype to reset the above stopImmediatePropagation()
+
                                 jQuery.extend(saved[0], jQuery.Event.prototype),
                                 saved.slice(1),
                                 this
                             )
                         });
 
-                        // Abort handling of the native event
+
                         event.stopImmediatePropagation();
                     }
                 }
@@ -5380,7 +5373,7 @@
 
         jQuery.removeEvent = function(elem, type, handle) {
 
-            // This "if" is needed for plain objects
+
             if (elem.removeEventListener) {
                 elem.removeEventListener(type, handle);
             }
@@ -5388,29 +5381,26 @@
 
         jQuery.Event = function(src, props) {
 
-            // Allow instantiation without the 'new' keyword
+
             if (!(this instanceof jQuery.Event)) {
                 return new jQuery.Event(src, props);
             }
 
-            // Event object
+
             if (src && src.type) {
                 this.originalEvent = src;
                 this.type = src.type;
 
-                // Events bubbling up the document may have been marked as prevented
-                // by a handler lower down the tree; reflect the correct value.
+
                 this.isDefaultPrevented = src.defaultPrevented ||
                     src.defaultPrevented === undefined &&
 
-                    // Support: Android <=2.3 only
+
                     src.returnValue === false ?
                     returnTrue :
                     returnFalse;
 
-                // Create target properties
-                // Support: Safari <=6 - 7 only
-                // Target should not be a text node (#504, #13143)
+
                 this.target = (src.target && src.target.nodeType === 3) ?
                     src.target.parentNode :
                     src.target;
@@ -5475,7 +5465,7 @@
             }
         };
 
-        // Includes all common event props including KeyEvent and MouseEvent specific props
+
         jQuery.each({
             altKey: true,
             bubbles: true,
@@ -5511,12 +5501,12 @@
             which: function(event) {
                 var button = event.button;
 
-                // Add which for key events
+
                 if (event.which == null && rkeyEvent.test(event.type)) {
                     return event.charCode != null ? event.charCode : event.keyCode;
                 }
 
-                // Add which for click: 1 === left; 2 === middle; 3 === right
+
                 if (!event.which && button !== undefined && rmouseEvent.test(event.type)) {
                     if (button & 1) {
                         return 1;
@@ -5540,38 +5530,27 @@
         jQuery.each({ focus: "focusin", blur: "focusout" }, function(type, delegateType) {
             jQuery.event.special[type] = {
 
-                // Utilize native event if possible so blur/focus sequence is correct
+
                 setup: function() {
 
-                    // Claim the first handler
-                    // dataPriv.set( this, "focus", ... )
-                    // dataPriv.set( this, "blur", ... )
+
                     leverageNative(this, type, expectSync);
 
-                    // Return false to allow normal processing in the caller
+
                     return false;
                 },
                 trigger: function() {
 
-                    // Force setup before trigger
+
                     leverageNative(this, type);
 
-                    // Return non-false to allow normal event-path propagation
+
                     return true;
                 },
 
                 delegateType: delegateType
             };
-        });
-
-        // Create mouseenter/leave events using mouseover/out and event-time checks
-        // so that event delegation works in jQuery.
-        // Do the same for pointerenter/pointerleave and pointerover/pointerout
-        //
-        // Support: Safari 7 only
-        // Safari sends mouseenter too often; see:
-        // https://bugs.chromium.org/p/chromium/issues/detail?id=470258
-        // for the description of the bug (it existed in older Chrome versions as well).
+        })
         jQuery.each({
             mouseenter: "mouseover",
             mouseleave: "mouseout",
@@ -8857,27 +8836,23 @@
         jQuery.extend({
 
 
-            active: 0,
+                active: 0,
 
 
-            lastModified: {},
-            etag: {},
+                lastModified: {},
+                etag: {},
 
-            ajaxSettings: {
-                url: location.href,
-                type: "GET",
-                isLocal: rlocalProtocol.test(location.protocol),
-                global: true,
-                processData: true,
-                async: true,
-                contentType: "application/x-www-form-urlencoded; charset=UTF-8"
+                ajaxSettings: {
+                    url: location.href,
+                    type: "GET",
+                    isLocal: rlocalProtocol.test(location.protocol),
+                    global: true,
+                    processData: true,
+                    async: true,
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8"
 
-                    accepts: {
-                    "*": allTypes,
-                    text: "text/plain",
-                    html: "text/html",
-                    xml: "application/xml, text/xml",
-                    json: "application/json, text/javascript"
+
+
                 },
 
                 contents: {
@@ -9368,980 +9343,971 @@
             }
         });
 
-        jQuery.each(["get", "post"], function(i, method) {
-            jQuery[method] = function(url, data, callback, type) {
+    jQuery.each(["get", "post"], function(i, method) {
+        jQuery[method] = function(url, data, callback, type) {
 
 
-                if (isFunction(data)) {
-                    type = type || callback;
-                    callback = data;
-                    data = undefined;
-                }
+            if (isFunction(data)) {
+                type = type || callback;
+                callback = data;
+                data = undefined;
+            }
 
 
-                return jQuery.ajax(jQuery.extend({
-                    url: url,
-                    type: method,
-                    dataType: type,
-                    data: data,
-                    success: callback
-                }, jQuery.isPlainObject(url) && url));
-            };
-        });
-
-
-        jQuery._evalUrl = function(url, options) {
-            return jQuery.ajax({
+            return jQuery.ajax(jQuery.extend({
                 url: url,
-
-
-                type: "GET",
-                dataType: "script",
-                cache: true,
-                async: false,
-                global: false,
-
-
-                converters: {
-                    "text script": function() {}
-                },
-                dataFilter: function(response) {
-                    jQuery.globalEval(response, options);
-                }
-            });
+                type: method,
+                dataType: type,
+                data: data,
+                success: callback
+            }, jQuery.isPlainObject(url) && url));
         };
+    });
 
 
-        jQuery.fn.extend({
-            wrapAll: function(html) {
-                var wrap;
+    jQuery._evalUrl = function(url, options) {
+        return jQuery.ajax({
+            url: url,
 
-                if (this[0]) {
-                    if (isFunction(html)) {
-                        html = html.call(this[0]);
-                    }
 
+            type: "GET",
+            dataType: "script",
+            cache: true,
+            async: false,
+            global: false,
 
-                    wrap = jQuery(html, this[0].ownerDocument).eq(0).clone(true);
 
-                    if (this[0].parentNode) {
-                        wrap.insertBefore(this[0]);
-                    }
-
-                    wrap.map(function() {
-                        var elem = this;
-
-                        while (elem.firstElementChild) {
-                            elem = elem.firstElementChild;
-                        }
-
-                        return elem;
-                    }).append(this);
-                }
-
-                return this;
-            },
-
-            wrapInner: function(html) {
-                if (isFunction(html)) {
-                    return this.each(function(i) {
-                        jQuery(this).wrapInner(html.call(this, i));
-                    });
-                }
-
-                return this.each(function() {
-                    var self = jQuery(this),
-                        contents = self.contents();
-
-                    if (contents.length) {
-                        contents.wrapAll(html);
-
-                    } else {
-                        self.append(html);
-                    }
-                });
-            },
-
-            wrap: function(html) {
-                var htmlIsFunction = isFunction(html);
-
-                return this.each(function(i) {
-                    jQuery(this).wrapAll(htmlIsFunction ? html.call(this, i) : html);
-                });
-            },
-
-            unwrap: function(selector) {
-                this.parent(selector).not("body").each(function() {
-                    jQuery(this).replaceWith(this.childNodes);
-                });
-                return this;
-            }
-        });
-
-
-        jQuery.expr.pseudos.hidden = function(elem) {
-            return !jQuery.expr.pseudos.visible(elem);
-        };
-        jQuery.expr.pseudos.visible = function(elem) {
-            return !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
-        };
-
-
-
-
-        jQuery.ajaxSettings.xhr = function() {
-            try {
-                return new window.XMLHttpRequest();
-            } catch (e) {}
-        };
-
-        var xhrSuccessStatus = {
-
-
-                0: 200,
-
-
-                1223: 204
-            },
-            xhrSupported = jQuery.ajaxSettings.xhr();
-
-        support.cors = !!xhrSupported && ("withCredentials" in xhrSupported);
-        support.ajax = xhrSupported = !!xhrSupported;
-
-        jQuery.ajaxTransport(function(options) {
-            var callback, errorCallback;
-
-
-            if (support.cors || xhrSupported && !options.crossDomain) {
-                return {
-                    send: function(headers, complete) {
-                        var i,
-                            xhr = options.xhr();
-
-                        xhr.open(
-                            options.type,
-                            options.url,
-                            options.async,
-                            options.username,
-                            options.password
-                        );
-
-
-                        if (options.xhrFields) {
-                            for (i in options.xhrFields) {
-                                xhr[i] = options.xhrFields[i];
-                            }
-                        }
-
-
-                        if (options.mimeType && xhr.overrideMimeType) {
-                            xhr.overrideMimeType(options.mimeType);
-                        }
-
-
-
-                        if (!options.crossDomain && !headers["X-Requested-With"]) {
-                            headers["X-Requested-With"] = "XMLHttpRequest";
-                        }
-
-
-                        for (i in headers) {
-                            xhr.setRequestHeader(i, headers[i]);
-                        }
-
-
-                        callback = function(type) {
-                            return function() {
-                                if (callback) {
-                                    callback = errorCallback = xhr.onload =
-                                        xhr.onerror = xhr.onabort = xhr.ontimeout =
-                                        xhr.onreadystatechange = null;
-
-                                    if (type === "abort") {
-                                        xhr.abort();
-                                    } else if (type === "error") {
-
-
-
-                                        if (typeof xhr.status !== "number") {
-                                            complete(0, "error");
-                                        } else {
-                                            complete(
-
-
-                                                xhr.status,
-                                                xhr.statusText
-                                            );
-                                        }
-                                    } else {
-                                        complete(
-                                            xhrSuccessStatus[xhr.status] || xhr.status,
-                                            xhr.statusText,
-
-
-                                            (xhr.responseType || "text") !== "text" ||
-                                            typeof xhr.responseText !== "string" ? { binary: xhr.response } : { text: xhr.responseText },
-                                            xhr.getAllResponseHeaders()
-                                        );
-                                    }
-                                }
-                            };
-                        };
-
-
-                        xhr.onload = callback();
-                        errorCallback = xhr.onerror = xhr.ontimeout = callback("error");
-
-
-                        if (xhr.onabort !== undefined) {
-                            xhr.onabort = errorCallback;
-                        } else {
-                            xhr.onreadystatechange = function() {
-
-
-                                if (xhr.readyState === 4) {
-
-
-
-                                    window.setTimeout(function() {
-                                        if (callback) {
-                                            errorCallback();
-                                        }
-                                    });
-                                }
-                            };
-                        }
-
-
-                        callback = callback("abort");
-
-                        try {
-
-
-                            xhr.send(options.hasContent && options.data || null);
-                        } catch (e) {
-
-
-                            if (callback) {
-                                throw e;
-                            }
-                        }
-                    },
-
-                    abort: function() {
-                        if (callback) {
-                            callback();
-                        }
-                    }
-                };
-            }
-        });
-
-
-
-
-
-        jQuery.ajaxPrefilter(function(s) {
-            if (s.crossDomain) {
-                s.contents.script = false;
-            }
-        });
-
-
-        jQuery.ajaxSetup({
-            accepts: {
-                script: "text/javascript, application/javascript, " +
-                    "application/ecmascript, application/x-ecmascript"
-            },
-            contents: {
-                script: /\b(?:java|ecma)script\b/
-            },
             converters: {
-                "text script": function(text) {
-                    jQuery.globalEval(text);
-                    return text;
-                }
+                "text script": function() {}
+            },
+            dataFilter: function(response) {
+                jQuery.globalEval(response, options);
             }
         });
+    };
 
 
-        jQuery.ajaxPrefilter("script", function(s) {
-            if (s.cache === undefined) {
-                s.cache = false;
-            }
-            if (s.crossDomain) {
-                s.type = "GET";
-            }
-        });
+    jQuery.fn.extend({
+        wrapAll: function(html) {
+            var wrap;
 
-
-        jQuery.ajaxTransport("script", function(s) {
-
-
-            if (s.crossDomain || s.scriptAttrs) {
-                var script, callback;
-                return {
-                    send: function(_, complete) {
-                        script = jQuery("<script>")
-                            .attr(s.scriptAttrs || {})
-                            .prop({ charset: s.scriptCharset, src: s.url })
-                            .on("load error", callback = function(evt) {
-                                script.remove();
-                                callback = null;
-                                if (evt) {
-                                    complete(evt.type === "error" ? 404 : 200, evt.type);
-                                }
-                            });
-
-
-                        document.head.appendChild(script[0]);
-                    },
-                    abort: function() {
-                        if (callback) {
-                            callback();
-                        }
-                    }
-                };
-            }
-        });
-
-
-
-
-        var oldCallbacks = [],
-            rjsonp = /(=)\?(?=&|$)|\?\?/;
-
-
-        jQuery.ajaxSetup({
-            jsonp: "callback",
-            jsonpCallback: function() {
-                var callback = oldCallbacks.pop() || (jQuery.expando + "_" + (nonce++));
-                this[callback] = true;
-                return callback;
-            }
-        });
-
-
-        jQuery.ajaxPrefilter("json jsonp", function(s, originalSettings, jqXHR) {
-
-            var callbackName, overwritten, responseContainer,
-                jsonProp = s.jsonp !== false && (rjsonp.test(s.url) ?
-                    "url" :
-                    typeof s.data === "string" &&
-                    (s.contentType || "")
-                    .indexOf("application/x-www-form-urlencoded") === 0 &&
-                    rjsonp.test(s.data) && "data"
-                );
-
-
-            if (jsonProp || s.dataTypes[0] === "jsonp") {
-
-
-                callbackName = s.jsonpCallback = isFunction(s.jsonpCallback) ?
-                    s.jsonpCallback() :
-                    s.jsonpCallback;
-
-
-                if (jsonProp) {
-                    s[jsonProp] = s[jsonProp].replace(rjsonp, "$1" + callbackName);
-                } else if (s.jsonp !== false) {
-                    s.url += (rquery.test(s.url) ? "&" : "?") + s.jsonp + "=" + callbackName;
+            if (this[0]) {
+                if (isFunction(html)) {
+                    html = html.call(this[0]);
                 }
 
 
-                s.converters["script json"] = function() {
-                    if (!responseContainer) {
-                        jQuery.error(callbackName + " was not called");
-                    }
-                    return responseContainer[0];
-                };
+                wrap = jQuery(html, this[0].ownerDocument).eq(0).clone(true);
 
-
-                s.dataTypes[0] = "json";
-
-
-                overwritten = window[callbackName];
-                window[callbackName] = function() {
-                    responseContainer = arguments;
-                };
-
-
-                jqXHR.always(function() {
-
-                    if (overwritten === undefined) {
-                        jQuery(window).removeProp(callbackName);
-
-
-                    } else {
-                        window[callbackName] = overwritten;
-                    }
-
-
-                    if (s[callbackName]) {
-
-
-                        s.jsonpCallback = originalSettings.jsonpCallback;
-
-
-                        oldCallbacks.push(callbackName);
-                    }
-
-
-                    if (responseContainer && isFunction(overwritten)) {
-                        overwritten(responseContainer[0]);
-                    }
-
-                    responseContainer = overwritten = undefined;
-                });
-
-
-                return "script";
-            }
-        });
-
-
-
-
-
-        support.createHTMLDocument = (function() {
-            var body = document.implementation.createHTMLDocument("").body;
-            body.innerHTML = "<form></form><form></form>";
-            return body.childNodes.length === 2;
-        })();
-
-
-
-        jQuery.parseHTML = function(data, context, keepScripts) {
-            if (typeof data !== "string") {
-                return [];
-            }
-            if (typeof context === "boolean") {
-                keepScripts = context;
-                context = false;
-            }
-
-            var base, parsed, scripts;
-
-            if (!context) {
-
-
-                if (support.createHTMLDocument) {
-                    context = document.implementation.createHTMLDocument("");
-
-
-                    base = context.createElement("base");
-                    base.href = document.location.href;
-                    context.head.appendChild(base);
-                } else {
-                    context = document;
+                if (this[0].parentNode) {
+                    wrap.insertBefore(this[0]);
                 }
-            }
 
-            parsed = rsingleTag.exec(data);
-            scripts = !keepScripts && [];
+                wrap.map(function() {
+                    var elem = this;
 
+                    while (elem.firstElementChild) {
+                        elem = elem.firstElementChild;
+                    }
 
-            if (parsed) {
-                return [context.createElement(parsed[1])];
-            }
-
-            parsed = buildFragment([data], context, scripts);
-
-            if (scripts && scripts.length) {
-                jQuery(scripts).remove();
-            }
-
-            return jQuery.merge([], parsed.childNodes);
-        };
-
-
-        /**
-         * Load a url into a page
-         */
-        jQuery.fn.load = function(url, params, callback) {
-            var selector, type, response,
-                self = this,
-                off = url.indexOf(" ");
-
-            if (off > -1) {
-                selector = stripAndCollapse(url.slice(off));
-                url = url.slice(0, off);
-            }
-
-
-            if (isFunction(params)) {
-
-
-                callback = params;
-                params = undefined;
-
-
-            } else if (params && typeof params === "object") {
-                type = "POST";
-            }
-
-            if (self.length > 0) {
-                jQuery.ajax({
-                    url: url,
-
-
-                    type: type || "GET",
-                    dataType: "html",
-                    data: params
-                }).done(function(responseText) {
-
-
-                    response = arguments;
-
-                    self.html(selector jQuery("<div>").append(jQuery.parseHTML(responseText)).find(selector):
-
-
-                        responseText);
-
-
-                }).always(callback && function(jqXHR, status) {
-                    self.each(function() {
-                        callback.apply(this, response || [jqXHR.responseText, status, jqXHR]);
-                    });
-                });
+                    return elem;
+                }).append(this);
             }
 
             return this;
-        };
+        },
 
-
-
-
-        // Attach a bunch of functions for handling common AJAX events
-        jQuery.each([
-            "ajaxStart",
-            "ajaxStop",
-            "ajaxComplete",
-            "ajaxError",
-            "ajaxSuccess",
-            "ajaxSend"
-        ], function(i, type) {
-            jQuery.fn[type] = function(fn) {
-                return this.on(type, fn);
-            };
-        });
-
-
-
-
-        jQuery.expr.pseudos.animated = function(elem) {
-            return jQuery.grep(jQuery.timers, function(fn) {
-                return elem === fn.elem;
-            }).length;
-        };
-
-
-
-
-        jQuery.offset = {
-            setOffset: function(elem, options, i) {
-                var curPosition, curLeft, curCSSTop, curTop, curOffset, curCSSLeft, calculatePosition,
-                    position = jQuery.css(elem, "position"),
-                    curElem = jQuery(elem),
-                    props = {};
-
-                // Set position first, in-case top/left are set even on static elem
-                if (position === "static") {
-                    elem.style.position = "relative";
-                }
-
-                curOffset = curElem.offset();
-                curCSSTop = jQuery.css(elem, "top");
-                curCSSLeft = jQuery.css(elem, "left");
-                calculatePosition = (position === "absolute" || position === "fixed") &&
-                    (curCSSTop + curCSSLeft).indexOf("auto") > -1;
-
-                // Need to be able to calculate position if either
-                // top or left is auto and position is either absolute or fixed
-                if (calculatePosition) {
-                    curPosition = curElem.position();
-                    curTop = curPosition.top;
-                    curLeft = curPosition.left;
-
-                } else {
-                    curTop = parseFloat(curCSSTop) || 0;
-                    curLeft = parseFloat(curCSSLeft) || 0;
-                }
-
-                if (isFunction(options)) {
-
-                    // Use jQuery.extend here to allow modification of coordinates argument (gh-1848)
-                    options = options.call(elem, i, jQuery.extend({}, curOffset));
-                }
-
-                if (options.top != null) {
-                    props.top = (options.top - curOffset.top) + curTop;
-                }
-                if (options.left != null) {
-                    props.left = (options.left - curOffset.left) + curLeft;
-                }
-
-                if ("using" in options) {
-                    options.using.call(elem, props);
-
-                } else {
-                    curElem.css(props);
-                }
-            }
-        };
-
-        jQuery.fn.extend({
-
-            // offset() relates an element's border box to the document origin
-            offset: function(options) {
-
-                // Preserve chaining for setter
-                if (arguments.length) {
-                    return options === undefined ?
-                        this :
-                        this.each(function(i) {
-                            jQuery.offset.setOffset(this, options, i);
-                        });
-                }
-
-                var rect, win,
-                    elem = this[0];
-
-                if (!elem) {
-                    return;
-                }
-
-                // Return zeros for disconnected and hidden (display: none) elements (gh-2310)
-                // Support: IE <=11 only
-                // Running getBoundingClientRect on a
-                // disconnected node in IE throws an error
-                if (!elem.getClientRects().length) {
-                    return { top: 0, left: 0 };
-                }
-
-                // Get document-relative position by adding viewport scroll to viewport-relative gBCR
-                rect = elem.getBoundingClientRect();
-                win = elem.ownerDocument.defaultView;
-                return {
-                    top: rect.top + win.pageYOffset,
-                    left: rect.left + win.pageXOffset
-                };
-            },
-
-            // position() relates an element's margin box to its offset parent's padding box
-            // This corresponds to the behavior of CSS absolute positioning
-            position: function() {
-                if (!this[0]) {
-                    return;
-                }
-
-                var offsetParent, offset, doc,
-                    elem = this[0],
-                    parentOffset = { top: 0, left: 0 };
-
-                // position:fixed elements are offset from the viewport, which itself always has zero offset
-                if (jQuery.css(elem, "position") === "fixed") {
-
-                    // Assume position:fixed implies availability of getBoundingClientRect
-                    offset = elem.getBoundingClientRect();
-
-                } else {
-                    offset = this.offset();
-
-                    // Account for the *real* offset parent, which can be the document or its root element
-                    // when a statically positioned element is identified
-                    doc = elem.ownerDocument;
-                    offsetParent = elem.offsetParent || doc.documentElement;
-                    while (offsetParent &&
-                        (offsetParent === doc.body || offsetParent === doc.documentElement) &&
-                        jQuery.css(offsetParent, "position") === "static") {
-
-                        offsetParent = offsetParent.parentNode;
-                    }
-                    if (offsetParent && offsetParent !== elem && offsetParent.nodeType === 1) {
-
-                        // Incorporate borders into its offset, since they are outside its content origin
-                        parentOffset = jQuery(offsetParent).offset();
-                        parentOffset.top += jQuery.css(offsetParent, "borderTopWidth", true);
-                        parentOffset.left += jQuery.css(offsetParent, "borderLeftWidth", true);
-                    }
-                }
-
-                // Subtract parent offsets and element margins
-                return {
-                    top: offset.top - parentOffset.top - jQuery.css(elem, "marginTop", true),
-                    left: offset.left - parentOffset.left - jQuery.css(elem, "marginLeft", true)
-                };
-            },
-
-            // This method will return documentElement in the following cases:
-            // 1) For the element inside the iframe without offsetParent, this method will return
-            //    documentElement of the parent window
-            // 2) For the hidden or detached element
-            // 3) For body or html element, i.e. in case of the html node - it will return itself
-            //
-            // but those exceptions were never presented as a real life use-cases
-            // and might be considered as more preferable results.
-            //
-            // This logic, however, is not guaranteed and can change at any point in the future
-            offsetParent: function() {
-                return this.map(function() {
-                    var offsetParent = this.offsetParent;
-
-                    while (offsetParent && jQuery.css(offsetParent, "position") === "static") {
-                        offsetParent = offsetParent.offsetParent;
-                    }
-
-                    return offsetParent || documentElement;
+        wrapInner: function(html) {
+            if (isFunction(html)) {
+                return this.each(function(i) {
+                    jQuery(this).wrapInner(html.call(this, i));
                 });
             }
-        });
 
-        // Create scrollLeft and scrollTop methods
-        jQuery.each({ scrollLeft: "pageXOffset", scrollTop: "pageYOffset" }, function(method, prop) {
-            var top = "pageYOffset" === prop;
+            return this.each(function() {
+                var self = jQuery(this),
+                    contents = self.contents();
 
-            jQuery.fn[method] = function(val) {
-                return access(this, function(elem, method, val) {
+                if (contents.length) {
+                    contents.wrapAll(html);
 
-                    // Coalesce documents and windows
-                    var win;
-                    if (isWindow(elem)) {
-                        win = elem;
-                    } else if (elem.nodeType === 9) {
-                        win = elem.defaultView;
-                    }
-
-                    if (val === undefined) {
-                        return win ? win[prop] : elem[method];
-                    }
-
-                    if (win) {
-                        win.scrollTo(!top ? val : win.pageXOffset,
-                            top ? val : win.pageYOffset
-                        );
-
-                    } else {
-                        elem[method] = val;
-                    }
-                }, method, val, arguments.length);
-            };
-        });
-
-        // Support: Safari <=7 - 9.1, Chrome <=37 - 49
-        // Add the top/left cssHooks using jQuery.fn.position
-        // Webkit bug: https://bugs.webkit.org/show_bug.cgi?id=29084
-        // Blink bug: https://bugs.chromium.org/p/chromium/issues/detail?id=589347
-        // getComputedStyle returns percent when specified for top/left/bottom/right;
-        // rather than make the css module depend on the offset module, just check for it here
-        jQuery.each(["top", "left"], function(i, prop) {
-            jQuery.cssHooks[prop] = addGetHookIf(support.pixelPosition,
-                function(elem, computed) {
-                    if (computed) {
-                        computed = curCSS(elem, prop);
-
-                        // If curCSS returns percentage, fallback to offset
-                        return rnumnonpx.test(computed) ?
-                            jQuery(elem).position()[prop] + "px" :
-                            computed;
-                    }
+                } else {
+                    self.append(html);
                 }
-            );
-        });
+            });
+        },
+
+        wrap: function(html) {
+            var htmlIsFunction = isFunction(html);
+
+            return this.each(function(i) {
+                jQuery(this).wrapAll(htmlIsFunction ? html.call(this, i) : html);
+            });
+        },
+
+        unwrap: function(selector) {
+            this.parent(selector).not("body").each(function() {
+                jQuery(this).replaceWith(this.childNodes);
+            });
+            return this;
+        }
+    });
 
 
-        // Create innerHeight, innerWidth, height, width, outerHeight and outerWidth methods
-        jQuery.each({ Height: "height", Width: "width" }, function(name, type) {
-            jQuery.each({ padding: "inner" + name, content: type, "": "outer" + name },
-                function(defaultExtra, funcName) {
+    jQuery.expr.pseudos.hidden = function(elem) {
+        return !jQuery.expr.pseudos.visible(elem);
+    }; jQuery.expr.pseudos.visible = function(elem) {
+        return !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
+    };
 
-                    // Margin is only for outerHeight, outerWidth
-                    jQuery.fn[funcName] = function(margin, value) {
-                        var chainable = arguments.length && (defaultExtra || typeof margin !== "boolean"),
-                            extra = defaultExtra || (margin === true || value === true ? "margin" : "border");
 
-                        return access(this, function(elem, type, value) {
-                            var doc;
 
-                            if (isWindow(elem)) {
 
-                                // $( window ).outerWidth/Height return w/h including scrollbars (gh-1729)
-                                return funcName.indexOf("outer") === 0 ?
-                                    elem["inner" + name] :
-                                    elem.document.documentElement["client" + name];
+    jQuery.ajaxSettings.xhr = function() {
+        try {
+            return new window.XMLHttpRequest();
+        } catch (e) {}
+    };
+
+    var xhrSuccessStatus = {
+
+
+            0: 200,
+
+
+            1223: 204
+        },
+        xhrSupported = jQuery.ajaxSettings.xhr();
+
+    support.cors = !!xhrSupported && ("withCredentials" in xhrSupported); support.ajax = xhrSupported = !!xhrSupported;
+
+    jQuery.ajaxTransport(function(options) {
+        var callback, errorCallback;
+
+
+        if (support.cors || xhrSupported && !options.crossDomain) {
+            return {
+                send: function(headers, complete) {
+                    var i,
+                        xhr = options.xhr();
+
+                    xhr.open(
+                        options.type,
+                        options.url,
+                        options.async,
+                        options.username,
+                        options.password
+                    );
+
+
+                    if (options.xhrFields) {
+                        for (i in options.xhrFields) {
+                            xhr[i] = options.xhrFields[i];
+                        }
+                    }
+
+
+                    if (options.mimeType && xhr.overrideMimeType) {
+                        xhr.overrideMimeType(options.mimeType);
+                    }
+
+
+
+                    if (!options.crossDomain && !headers["X-Requested-With"]) {
+                        headers["X-Requested-With"] = "XMLHttpRequest";
+                    }
+
+
+                    for (i in headers) {
+                        xhr.setRequestHeader(i, headers[i]);
+                    }
+
+
+                    callback = function(type) {
+                        return function() {
+                            if (callback) {
+                                callback = errorCallback = xhr.onload =
+                                    xhr.onerror = xhr.onabort = xhr.ontimeout =
+                                    xhr.onreadystatechange = null;
+
+                                if (type === "abort") {
+                                    xhr.abort();
+                                } else if (type === "error") {
+
+
+
+                                    if (typeof xhr.status !== "number") {
+                                        complete(0, "error");
+                                    } else {
+                                        complete(
+
+
+                                            xhr.status,
+                                            xhr.statusText
+                                        );
+                                    }
+                                } else {
+                                    complete(
+                                        xhrSuccessStatus[xhr.status] || xhr.status,
+                                        xhr.statusText,
+
+
+                                        (xhr.responseType || "text") !== "text" ||
+                                        typeof xhr.responseText !== "string" ? { binary: xhr.response } : { text: xhr.responseText },
+                                        xhr.getAllResponseHeaders()
+                                    );
+                                }
                             }
-
-                            // Get document width or height
-                            if (elem.nodeType === 9) {
-                                doc = elem.documentElement;
-
-                                // Either scroll[Width/Height] or offset[Width/Height] or client[Width/Height],
-                                // whichever is greatest
-                                return Math.max(
-                                    elem.body["scroll" + name], doc["scroll" + name],
-                                    elem.body["offset" + name], doc["offset" + name],
-                                    doc["client" + name]
-                                );
-                            }
-
-                            return value === undefined ?
-
-                                // Get width or height on the element, requesting but not forcing parseFloat
-                                jQuery.css(elem, type, extra) :
-
-                                // Set width or height on the element
-                                jQuery.style(elem, type, value, extra);
-                        }, type, chainable ? margin : undefined, chainable);
+                        };
                     };
-                });
-        });
 
 
-        jQuery.each(("blur focus focusin focusout resize scroll click dblclick " +
-                "mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
-                "change select submit keydown keypress keyup contextmenu").split(" "),
-            function(i, name) {
+                    xhr.onload = callback();
+                    errorCallback = xhr.onerror = xhr.ontimeout = callback("error");
 
-                // Handle event binding
-                jQuery.fn[name] = function(data, fn) {
-                    return arguments.length > 0 ?
-                        this.on(name, null, data, fn) :
-                        this.trigger(name);
-                };
-            });
 
-        jQuery.fn.extend({
-            hover: function(fnOver, fnOut) {
-                return this.mouseenter(fnOver).mouseleave(fnOut || fnOver);
+                    if (xhr.onabort !== undefined) {
+                        xhr.onabort = errorCallback;
+                    } else {
+                        xhr.onreadystatechange = function() {
+
+
+                            if (xhr.readyState === 4) {
+
+
+
+                                window.setTimeout(function() {
+                                    if (callback) {
+                                        errorCallback();
+                                    }
+                                });
+                            }
+                        };
+                    }
+
+
+                    callback = callback("abort");
+
+                    try {
+
+
+                        xhr.send(options.hasContent && options.data || null);
+                    } catch (e) {
+
+
+                        if (callback) {
+                            throw e;
+                        }
+                    }
+                },
+
+                abort: function() {
+                    if (callback) {
+                        callback();
+                    }
+                }
+            };
+        }
+    });
+
+
+
+
+
+    jQuery.ajaxPrefilter(function(s) {
+        if (s.crossDomain) {
+            s.contents.script = false;
+        }
+    });
+
+
+    jQuery.ajaxSetup({
+        accepts: {
+            script: "text/javascript, application/javascript, " +
+                "application/ecmascript, application/x-ecmascript"
+        },
+        contents: {
+            script: /\b(?:java|ecma)script\b/
+        },
+        converters: {
+            "text script": function(text) {
+                jQuery.globalEval(text);
+                return text;
             }
-        });
+        }
+    });
+
+
+    jQuery.ajaxPrefilter("script", function(s) {
+        if (s.cache === undefined) {
+            s.cache = false;
+        }
+        if (s.crossDomain) {
+            s.type = "GET";
+        }
+    });
+
+
+    jQuery.ajaxTransport("script", function(s) {
+
+
+        if (s.crossDomain || s.scriptAttrs) {
+            var script, callback;
+            return {
+                send: function(_, complete) {
+                    script = jQuery("<script>")
+                        .attr(s.scriptAttrs || {})
+                        .prop({ charset: s.scriptCharset, src: s.url })
+                        .on("load error", callback = function(evt) {
+                            script.remove();
+                            callback = null;
+                            if (evt) {
+                                complete(evt.type === "error" ? 404 : 200, evt.type);
+                            }
+                        });
+
+
+                    document.head.appendChild(script[0]);
+                },
+                abort: function() {
+                    if (callback) {
+                        callback();
+                    }
+                }
+            };
+        }
+    });
 
 
 
 
-        jQuery.fn.extend({
+    var oldCallbacks = [],
+        rjsonp = /(=)\?(?=&|$)|\?\?/;
 
-            bind: function(types, data, fn) {
-                return this.on(types, null, data, fn);
-            },
-            unbind: function(types, fn) {
-                return this.off(types, null, fn);
-            },
 
-            delegate: function(selector, types, data, fn) {
-                return this.on(types, selector, data, fn);
-            },
-            undelegate: function(selector, types, fn) {
+    jQuery.ajaxSetup({
+        jsonp: "callback",
+        jsonpCallback: function() {
+            var callback = oldCallbacks.pop() || (jQuery.expando + "_" + (nonce++));
+            this[callback] = true;
+            return callback;
+        }
+    });
 
-                // ( namespace ) or ( selector, types [, fn] )
-                return arguments.length === 1 ?
-                    this.off(selector, "**") :
-                    this.off(types, selector || "**", fn);
+
+    jQuery.ajaxPrefilter("json jsonp", function(s, originalSettings, jqXHR) {
+
+        var callbackName, overwritten, responseContainer,
+            jsonProp = s.jsonp !== false && (rjsonp.test(s.url) ?
+                "url" :
+                typeof s.data === "string" &&
+                (s.contentType || "")
+                .indexOf("application/x-www-form-urlencoded") === 0 &&
+                rjsonp.test(s.data) && "data"
+            );
+
+
+        if (jsonProp || s.dataTypes[0] === "jsonp") {
+
+
+            callbackName = s.jsonpCallback = isFunction(s.jsonpCallback) ?
+                s.jsonpCallback() :
+                s.jsonpCallback;
+
+
+            if (jsonProp) {
+                s[jsonProp] = s[jsonProp].replace(rjsonp, "$1" + callbackName);
+            } else if (s.jsonp !== false) {
+                s.url += (rquery.test(s.url) ? "&" : "?") + s.jsonp + "=" + callbackName;
             }
-        });
 
-        // Bind a function to a context, optionally partially applying any
-        // arguments.
-        // jQuery.proxy is deprecated to promote standards (specifically Function#bind)
-        // However, it is not slated for removal any time soon
-        jQuery.proxy = function(fn, context) {
-            var tmp, args, proxy;
 
-            if (typeof context === "string") {
-                tmp = fn[context];
-                context = fn;
-                fn = tmp;
-            }
-
-            // Quick check to determine if target is callable, in the spec
-            // this throws a TypeError, but we will just return undefined.
-            if (!isFunction(fn)) {
-                return undefined;
-            }
-
-            // Simulated bind
-            args = slice.call(arguments, 2);
-            proxy = function() {
-                return fn.apply(context || this, args.concat(slice.call(arguments)));
+            s.converters["script json"] = function() {
+                if (!responseContainer) {
+                    jQuery.error(callbackName + " was not called");
+                }
+                return responseContainer[0];
             };
 
-            // Set the guid of unique handler to the same of original handler, so it can be removed
-            proxy.guid = fn.guid = fn.guid || jQuery.guid++;
 
-            return proxy;
-        };
+            s.dataTypes[0] = "json";
 
-        jQuery.holdReady = function(hold) {
-            if (hold) {
-                jQuery.readyWait++;
+
+            overwritten = window[callbackName];
+            window[callbackName] = function() {
+                responseContainer = arguments;
+            };
+
+
+            jqXHR.always(function() {
+
+                if (overwritten === undefined) {
+                    jQuery(window).removeProp(callbackName);
+
+
+                } else {
+                    window[callbackName] = overwritten;
+                }
+
+
+                if (s[callbackName]) {
+
+
+                    s.jsonpCallback = originalSettings.jsonpCallback;
+
+
+                    oldCallbacks.push(callbackName);
+                }
+
+
+                if (responseContainer && isFunction(overwritten)) {
+                    overwritten(responseContainer[0]);
+                }
+
+                responseContainer = overwritten = undefined;
+            });
+
+
+            return "script";
+        }
+    });
+
+
+
+
+
+    support.createHTMLDocument = (function() {
+        var body = document.implementation.createHTMLDocument("").body;
+        body.innerHTML = "<form></form><form></form>";
+        return body.childNodes.length === 2;
+    })();
+
+
+
+    jQuery.parseHTML = function(data, context, keepScripts) {
+        if (typeof data !== "string") {
+            return [];
+        }
+        if (typeof context === "boolean") {
+            keepScripts = context;
+            context = false;
+        }
+
+        var base, parsed, scripts;
+
+        if (!context) {
+
+
+            if (support.createHTMLDocument) {
+                context = document.implementation.createHTMLDocument("");
+
+
+                base = context.createElement("base");
+                base.href = document.location.href;
+                context.head.appendChild(base);
             } else {
-                jQuery.ready(true);
+                context = document;
             }
-        };
-        jQuery.isArray = Array.isArray;
-        jQuery.parseJSON = JSON.parse;
-        jQuery.nodeName = nodeName;
-        jQuery.isFunction = isFunction;
-        jQuery.isWindow = isWindow;
-        jQuery.camelCase = camelCase;
-        jQuery.type = toType;
+        }
 
-        jQuery.now = Date.now;
-
-        jQuery.isNumeric = function(obj) {
-
-            // As of jQuery 3.0, isNumeric is limited to
-            // strings and numbers (primitives or objects)
-            // that can be coerced to finite numbers (gh-2662)
-            var type = jQuery.type(obj);
-            return (type === "number" || type === "string") &&
-
-                // parseFloat NaNs numeric-cast false positives ("")
-                // ...but misinterprets leading-number strings, particularly hex literals ("0x...")
-                // subtraction forces infinities to NaN
-                !isNaN(obj - parseFloat(obj));
-        };
+        parsed = rsingleTag.exec(data);
+        scripts = !keepScripts && [];
 
 
+        if (parsed) {
+            return [context.createElement(parsed[1])];
+        }
+
+        parsed = buildFragment([data], context, scripts);
+
+        if (scripts && scripts.length) {
+            jQuery(scripts).remove();
+        }
+
+        return jQuery.merge([], parsed.childNodes);
+    };
 
 
+    /**
+     * Load a url into a page
+     */
+    jQuery.fn.load = function(url, params, callback) {
+        var selector, type, response,
+            self = this,
+            off = url.indexOf(" ");
+
+        if (off > -1) {
+            selector = stripAndCollapse(url.slice(off));
+            url = url.slice(0, off);
+        }
 
 
-        if (typeof define === "function" && define.amd) {
-            define("jquery", [], function() {
-                return jQuery;
+        if (isFunction(params)) {
+
+
+            callback = params;
+            params = undefined;
+
+
+        } else if (params && typeof params === "object") {
+            type = "POST";
+        }
+
+        if (self.length > 0) {
+            jQuery.ajax({
+                url: url,
+
+
+                type: type || "GET",
+                dataType: "html",
+                data: params
+            }).done(function(responseText) {
+
+
+                response = arguments;
+
+                self.html(selector jQuery("<div>").append(jQuery.parseHTML(responseText)).find(selector):
+
+
+                    responseText);
+
+
+            }).always(callback && function(jqXHR, status) {
+                self.each(function() {
+                    callback.apply(this, response || [jqXHR.responseText, status, jqXHR]);
+                });
             });
         }
 
+        return this;
+    };
 
 
 
-        var
 
-
-            _jQuery = window.jQuery,
-
-            _$ = window.$;
-
-        jQuery.noConflict = function(deep) {
-            if (window.$ === jQuery) {
-                window.$ = _$;
-            }
-
-            if (deep && window.jQuery === jQuery) {
-                window.jQuery = _jQuery;
-            }
-
-            return jQuery;
+    // Attach a bunch of functions for handling common AJAX events
+    jQuery.each([
+        "ajaxStart",
+        "ajaxStop",
+        "ajaxComplete",
+        "ajaxError",
+        "ajaxSuccess",
+        "ajaxSend"
+    ], function(i, type) {
+        jQuery.fn[type] = function(fn) {
+            return this.on(type, fn);
         };
+    });
 
 
-        if (!noGlobal) {
-            window.jQuery = window.$ = jQuery;
+
+
+    jQuery.expr.pseudos.animated = function(elem) {
+        return jQuery.grep(jQuery.timers, function(fn) {
+            return elem === fn.elem;
+        }).length;
+    };
+
+
+
+
+    jQuery.offset = {
+        setOffset: function(elem, options, i) {
+            var curPosition, curLeft, curCSSTop, curTop, curOffset, curCSSLeft, calculatePosition,
+                position = jQuery.css(elem, "position"),
+                curElem = jQuery(elem),
+                props = {};
+
+            // Set position first, in-case top/left are set even on static elem
+            if (position === "static") {
+                elem.style.position = "relative";
+            }
+
+            curOffset = curElem.offset();
+            curCSSTop = jQuery.css(elem, "top");
+            curCSSLeft = jQuery.css(elem, "left");
+            calculatePosition = (position === "absolute" || position === "fixed") &&
+                (curCSSTop + curCSSLeft).indexOf("auto") > -1;
+
+            // Need to be able to calculate position if either
+            // top or left is auto and position is either absolute or fixed
+            if (calculatePosition) {
+                curPosition = curElem.position();
+                curTop = curPosition.top;
+                curLeft = curPosition.left;
+
+            } else {
+                curTop = parseFloat(curCSSTop) || 0;
+                curLeft = parseFloat(curCSSLeft) || 0;
+            }
+
+            if (isFunction(options)) {
+
+                // Use jQuery.extend here to allow modification of coordinates argument (gh-1848)
+                options = options.call(elem, i, jQuery.extend({}, curOffset));
+            }
+
+            if (options.top != null) {
+                props.top = (options.top - curOffset.top) + curTop;
+            }
+            if (options.left != null) {
+                props.left = (options.left - curOffset.left) + curLeft;
+            }
+
+            if ("using" in options) {
+                options.using.call(elem, props);
+
+            } else {
+                curElem.css(props);
+            }
+        }
+    };
+
+    jQuery.fn.extend({
+
+        // offset() relates an element's border box to the document origin
+        offset: function(options) {
+
+            // Preserve chaining for setter
+            if (arguments.length) {
+                return options === undefined ?
+                    this :
+                    this.each(function(i) {
+                        jQuery.offset.setOffset(this, options, i);
+                    });
+            }
+
+            var rect, win,
+                elem = this[0];
+
+            if (!elem) {
+                return;
+            }
+
+            // Return zeros for disconnected and hidden (display: none) elements (gh-2310)
+            // Support: IE <=11 only
+            // Running getBoundingClientRect on a
+            // disconnected node in IE throws an error
+            if (!elem.getClientRects().length) {
+                return { top: 0, left: 0 };
+            }
+
+            // Get document-relative position by adding viewport scroll to viewport-relative gBCR
+            rect = elem.getBoundingClientRect();
+            win = elem.ownerDocument.defaultView;
+            return {
+                top: rect.top + win.pageYOffset,
+                left: rect.left + win.pageXOffset
+            };
+        },
+
+        // position() relates an element's margin box to its offset parent's padding box
+        // This corresponds to the behavior of CSS absolute positioning
+        position: function() {
+            if (!this[0]) {
+                return;
+            }
+
+            var offsetParent, offset, doc,
+                elem = this[0],
+                parentOffset = { top: 0, left: 0 };
+
+            // position:fixed elements are offset from the viewport, which itself always has zero offset
+            if (jQuery.css(elem, "position") === "fixed") {
+
+                // Assume position:fixed implies availability of getBoundingClientRect
+                offset = elem.getBoundingClientRect();
+
+            } else {
+                offset = this.offset();
+
+                // Account for the *real* offset parent, which can be the document or its root element
+                // when a statically positioned element is identified
+                doc = elem.ownerDocument;
+                offsetParent = elem.offsetParent || doc.documentElement;
+                while (offsetParent &&
+                    (offsetParent === doc.body || offsetParent === doc.documentElement) &&
+                    jQuery.css(offsetParent, "position") === "static") {
+
+                    offsetParent = offsetParent.parentNode;
+                }
+                if (offsetParent && offsetParent !== elem && offsetParent.nodeType === 1) {
+
+                    // Incorporate borders into its offset, since they are outside its content origin
+                    parentOffset = jQuery(offsetParent).offset();
+                    parentOffset.top += jQuery.css(offsetParent, "borderTopWidth", true);
+                    parentOffset.left += jQuery.css(offsetParent, "borderLeftWidth", true);
+                }
+            }
+
+            // Subtract parent offsets and element margins
+            return {
+                top: offset.top - parentOffset.top - jQuery.css(elem, "marginTop", true),
+                left: offset.left - parentOffset.left - jQuery.css(elem, "marginLeft", true)
+            };
+        },
+
+        // This method will return documentElement in the following cases:
+        // 1) For the element inside the iframe without offsetParent, this method will return
+        //    documentElement of the parent window
+        // 2) For the hidden or detached element
+        // 3) For body or html element, i.e. in case of the html node - it will return itself
+        //
+        // but those exceptions were never presented as a real life use-cases
+        // and might be considered as more preferable results.
+        //
+        // This logic, however, is not guaranteed and can change at any point in the future
+        offsetParent: function() {
+            return this.map(function() {
+                var offsetParent = this.offsetParent;
+
+                while (offsetParent && jQuery.css(offsetParent, "position") === "static") {
+                    offsetParent = offsetParent.offsetParent;
+                }
+
+                return offsetParent || documentElement;
+            });
+        }
+    });
+
+    // Create scrollLeft and scrollTop methods
+    jQuery.each({ scrollLeft: "pageXOffset", scrollTop: "pageYOffset" }, function(method, prop) {
+        var top = "pageYOffset" === prop;
+
+        jQuery.fn[method] = function(val) {
+            return access(this, function(elem, method, val) {
+
+                // Coalesce documents and windows
+                var win;
+                if (isWindow(elem)) {
+                    win = elem;
+                } else if (elem.nodeType === 9) {
+                    win = elem.defaultView;
+                }
+
+                if (val === undefined) {
+                    return win ? win[prop] : elem[method];
+                }
+
+                if (win) {
+                    win.scrollTo(!top ? val : win.pageXOffset,
+                        top ? val : win.pageYOffset
+                    );
+
+                } else {
+                    elem[method] = val;
+                }
+            }, method, val, arguments.length);
+        };
+    });
+
+    // Support: Safari <=7 - 9.1, Chrome <=37 - 49
+    // Add the top/left cssHooks using jQuery.fn.position
+    // Webkit bug: https://bugs.webkit.org/show_bug.cgi?id=29084
+    // Blink bug: https://bugs.chromium.org/p/chromium/issues/detail?id=589347
+    // getComputedStyle returns percent when specified for top/left/bottom/right;
+    // rather than make the css module depend on the offset module, just check for it here
+    jQuery.each(["top", "left"], function(i, prop) {
+        jQuery.cssHooks[prop] = addGetHookIf(support.pixelPosition,
+            function(elem, computed) {
+                if (computed) {
+                    computed = curCSS(elem, prop);
+
+                    // If curCSS returns percentage, fallback to offset
+                    return rnumnonpx.test(computed) ?
+                        jQuery(elem).position()[prop] + "px" :
+                        computed;
+                }
+            }
+        );
+    });
+
+
+    // Create innerHeight, innerWidth, height, width, outerHeight and outerWidth methods
+    jQuery.each({ Height: "height", Width: "width" }, function(name, type) {
+        jQuery.each({ padding: "inner" + name, content: type, "": "outer" + name },
+            function(defaultExtra, funcName) {
+
+                // Margin is only for outerHeight, outerWidth
+                jQuery.fn[funcName] = function(margin, value) {
+                    var chainable = arguments.length && (defaultExtra || typeof margin !== "boolean"),
+                        extra = defaultExtra || (margin === true || value === true ? "margin" : "border");
+
+                    return access(this, function(elem, type, value) {
+                        var doc;
+
+                        if (isWindow(elem)) {
+
+                            // $( window ).outerWidth/Height return w/h including scrollbars (gh-1729)
+                            return funcName.indexOf("outer") === 0 ?
+                                elem["inner" + name] :
+                                elem.document.documentElement["client" + name];
+                        }
+
+                        // Get document width or height
+                        if (elem.nodeType === 9) {
+                            doc = elem.documentElement;
+
+                            // Either scroll[Width/Height] or offset[Width/Height] or client[Width/Height],
+                            // whichever is greatest
+                            return Math.max(
+                                elem.body["scroll" + name], doc["scroll" + name],
+                                elem.body["offset" + name], doc["offset" + name],
+                                doc["client" + name]
+                            );
+                        }
+
+                        return value === undefined ?
+
+                            // Get width or height on the element, requesting but not forcing parseFloat
+                            jQuery.css(elem, type, extra) :
+
+                            // Set width or height on the element
+                            jQuery.style(elem, type, value, extra);
+                    }, type, chainable ? margin : undefined, chainable);
+                };
+            });
+    });
+
+
+    jQuery.each(("blur focus focusin focusout resize scroll click dblclick " +
+            "mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
+            "change select submit keydown keypress keyup contextmenu").split(" "),
+        function(i, name) {
+
+            // Handle event binding
+            jQuery.fn[name] = function(data, fn) {
+                return arguments.length > 0 ?
+                    this.on(name, null, data, fn) :
+                    this.trigger(name);
+            };
+        });
+
+    jQuery.fn.extend({
+        hover: function(fnOver, fnOut) {
+            return this.mouseenter(fnOver).mouseleave(fnOut || fnOver);
+        }
+    });
+
+
+
+
+    jQuery.fn.extend({
+
+        bind: function(types, data, fn) {
+            return this.on(types, null, data, fn);
+        },
+        unbind: function(types, fn) {
+            return this.off(types, null, fn);
+        },
+
+        delegate: function(selector, types, data, fn) {
+            return this.on(types, selector, data, fn);
+        },
+        undelegate: function(selector, types, fn) {
+
+            // ( namespace ) or ( selector, types [, fn] )
+            return arguments.length === 1 ?
+                this.off(selector, "**") :
+                this.off(types, selector || "**", fn);
+        }
+    });
+
+    // Bind a function to a context, optionally partially applying any
+    // arguments.
+    // jQuery.proxy is deprecated to promote standards (specifically Function#bind)
+    // However, it is not slated for removal any time soon
+    jQuery.proxy = function(fn, context) {
+        var tmp, args, proxy;
+
+        if (typeof context === "string") {
+            tmp = fn[context];
+            context = fn;
+            fn = tmp;
         }
 
+        // Quick check to determine if target is callable, in the spec
+        // this throws a TypeError, but we will just return undefined.
+        if (!isFunction(fn)) {
+            return undefined;
+        }
+
+        // Simulated bind
+        args = slice.call(arguments, 2);
+        proxy = function() {
+            return fn.apply(context || this, args.concat(slice.call(arguments)));
+        };
+
+        // Set the guid of unique handler to the same of original handler, so it can be removed
+        proxy.guid = fn.guid = fn.guid || jQuery.guid++;
+
+        return proxy;
+    };
+
+    jQuery.holdReady = function(hold) {
+        if (hold) {
+            jQuery.readyWait++;
+        } else {
+            jQuery.ready(true);
+        }
+    }; jQuery.isArray = Array.isArray; jQuery.parseJSON = JSON.parse; jQuery.nodeName = nodeName; jQuery.isFunction = isFunction; jQuery.isWindow = isWindow; jQuery.camelCase = camelCase; jQuery.type = toType;
+
+    jQuery.now = Date.now;
+
+    jQuery.isNumeric = function(obj) {
+
+        // As of jQuery 3.0, isNumeric is limited to
+        // strings and numbers (primitives or objects)
+        // that can be coerced to finite numbers (gh-2662)
+        var type = jQuery.type(obj);
+        return (type === "number" || type === "string") &&
+
+            // parseFloat NaNs numeric-cast false positives ("")
+            // ...but misinterprets leading-number strings, particularly hex literals ("0x...")
+            // subtraction forces infinities to NaN
+            !isNaN(obj - parseFloat(obj));
+    };
 
 
+
+
+
+
+    if (typeof define === "function" && define.amd) {
+        define("jquery", [], function() {
+            return jQuery;
+        });
+    }
+
+
+
+
+    var
+
+
+        _jQuery = window.jQuery,
+
+        _$ = window.$;
+
+    jQuery.noConflict = function(deep) {
+        if (window.$ === jQuery) {
+            window.$ = _$;
+        }
+
+        if (deep && window.jQuery === jQuery) {
+            window.jQuery = _jQuery;
+        }
 
         return jQuery;
+    };
+
+
+    if (!noGlobal) {
+        window.jQuery = window.$ = jQuery;
     }
+
+
+
+
+    return jQuery;
+}

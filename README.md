@@ -18,7 +18,7 @@
 -JAVASCRIPT - We used javascript for dynamics.
 
 ## BDD
-<img src="images/home.png">
+<img src="/bootstrap.css/ivan-toress">
 
 
 - At the home page you will just press the order button and it will take you to our favourite options of pizza
